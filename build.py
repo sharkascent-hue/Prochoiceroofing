@@ -537,7 +537,7 @@ def about_page(p):
 {cta(p)}'''
 
 def portfolio_page(p):
-    gal = ['after-2.jpg', 'roof-6.jpg', 'roofer-dublin.jpg', 'roof-5.jpg', 'roof-1.jpg', 'after-3.jpg', 'roof-2.jpg', 'roof-3.jpg', 'after-1.jpg', 'roof-4.jpg', 'roof-installation-2.jpg', 'after-4.jpg', 'chimney-repairs.jpg', 'flat-roofing.jpg', 'guttering.jpg', 'roof-cleaning.jpg', 'roof-installation.jpg']
+    gal = ['after-2.jpg', 'roof-6.jpg', 'roofer-dublin.jpg', 'roof-5.jpg', 'roof-1.jpg', 'after-3.jpg', 'roof-2.jpg', 'roof-3.jpg', 'after-1.jpg', 'roof-4.jpg', 'after-4.jpg', 'chimney-repairs.jpg', 'flat-roofing.jpg', 'guttering.jpg', 'roof-cleaning.jpg']
     g = ''.join(f'<a href="{p}img/{x}"><img src="{p}img/{x}" alt="Roofing project by Pro Choice Roofing" loading="lazy"></a>' for x in gal)
     return f'''{phero(p, [('Portfolio', 'portfolio/')], 'Our portfolio.', 'Real roofs, real results. A look at recent roofing projects completed by the Pro Choice team across Dublin and the surrounding areas.', 'after-2.jpg')}
 {before_after(p, grid=True)}
