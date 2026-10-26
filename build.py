@@ -544,7 +544,6 @@ def portfolio_page(p):
 <section class="sec soft"><div class="wrap">
 <div class="sec-head"><div><span class="eyebrow">Gallery</span><h2 data-split>Recent jobs.</h2></div><p>Tap a photo to see it full size.</p></div>
 <div class="gal">{g}</div></div></section>
-<div class="lb" role="dialog" aria-label="Photo viewer"><button class="x" aria-label="Close">{I['x']}</button><button class="pv" aria-label="Previous">{I['left']}</button><img alt=""><button class="nx" aria-label="Next">{I['right']}</button></div>
 {cta(p)}'''
 
 def contact_page(p):

@@ -242,7 +242,7 @@ canvas.rain{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-e
 .ba-scroll{display:grid;grid-auto-flow:column;grid-auto-columns:min(560px,82vw);gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 0 26px;scrollbar-width:thin;scrollbar-color:var(--blue) transparent}
 .ba-scroll::-webkit-scrollbar{height:6px}.ba-scroll::-webkit-scrollbar-thumb{background:var(--blue);border-radius:6px}
 .ba-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
-.ba{scroll-snap-align:start}
+.ba{scroll-snap-align:start;margin:0;min-width:0}
 .ba figcaption{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:space-between;align-items:center;margin-top:16px;font-weight:700;font-family:var(--head)}
 .ba figcaption span{font-family:var(--body);font-size:.8rem;color:var(--muted);font-weight:600}
 .dark .ba figcaption span,.deep .ba figcaption span{color:rgba(255,255,255,.55)}
@@ -251,7 +251,8 @@ canvas.rain{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-e
 .compare img.before{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
 .compare .handle{position:absolute;top:0;bottom:0;left:var(--p);width:3px;margin-left:-1.5px;background:#fff;pointer-events:none;box-shadow:0 0 20px rgba(0,0,0,.4)}
 .compare .handle::after{content:"";position:absolute;top:50%;left:50%;width:52px;height:52px;border-radius:50%;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l-5 6 5 6M15 6l5 6-5 6'/%3E%3C/svg%3E") center/22px no-repeat;border:3px solid #fff;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;touch-action:pan-y}
+.compare{cursor:ew-resize;touch-action:pan-y}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;pointer-events:none}
 .compare .tag{position:absolute;top:16px;padding:7px 14px;border-radius:999px;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;background:rgba(6,22,48,.78);backdrop-filter:blur(6px);color:#fff;pointer-events:none}
 .compare .tag.l{left:16px}.compare .tag.r{right:16px;background:var(--blue)}
 
@@ -338,7 +339,8 @@ html.qd-open body{overflow:hidden}
 .gal a:hover::after{opacity:1}
 .lb{position:fixed;inset:0;z-index:980;background:rgba(4,12,26,.94);display:none;place-items:center;padding:30px}
 .lb.on{display:grid}
-.lb img{max-height:86vh;width:auto;border-radius:14px}
+.lb img{max-height:86vh;max-height:86dvh;width:auto;max-width:100%;border-radius:14px;object-fit:contain}
+.zoom{cursor:zoom-in}
 .lb button{position:absolute;width:50px;height:50px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;display:grid;place-items:center}
 .lb button svg{width:22px;height:22px}
 .lb .x{top:20px;right:20px}.lb .pv{left:20px;top:50%;margin-top:-25px}.lb .nx{right:20px;top:50%;margin-top:-25px}
@@ -452,3 +454,12 @@ html.qd-open body{overflow:hidden}
   .gal a{margin-bottom:10px;border-radius:12px}
 }
 .qd .formcard h3{padding-right:48px}
+@media (max-width:760px){
+  .ba-scroll{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr;overflow:visible;gap:34px;padding-bottom:0}
+  .compare{aspect-ratio:4/3.6;border-radius:18px}
+  .compare .handle::after{width:56px;height:56px}
+  .collage{grid-template-columns:1fr 1fr}
+  .collage figure:first-child{grid-column:1/-1}
+  .collage figure:last-child{grid-column:1/-1;aspect-ratio:16/10}
+  .lb{padding:12px}.lb .pv,.lb .nx{top:auto;bottom:24px;margin:0}.lb .pv{left:calc(50% - 64px)}.lb .nx{right:calc(50% - 64px)}
+}

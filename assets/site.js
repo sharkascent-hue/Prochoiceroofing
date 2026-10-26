@@ -104,25 +104,44 @@
     $$('input,select,textarea', form).forEach(f => f.addEventListener('input', () => f.closest('label') && f.closest('label').classList.remove('bad')));
   });
 
-  /* before / after sliders */
+  /* before / after sliders: drag anywhere on the photo (mouse or finger) */
   $$('.compare').forEach(c => {
     const r = $('input', c);
-    const set = v => c.style.setProperty('--p', v + '%');
+    const set = v => { r.value = v; c.style.setProperty('--p', v + '%'); };
     r.addEventListener('input', () => set(r.value)); set(r.value);
+    let drag = false, sx = 0, sy = 0, lock = null;
+    const at = x => { const b = c.getBoundingClientRect(); set(Math.round(Math.min(Math.max((x - b.left) / b.width, 0), 1) * 1000) / 10); };
+    c.addEventListener('pointerdown', e => { drag = true; sx = e.clientX; sy = e.clientY; lock = e.pointerType === 'mouse' ? 'x' : null; if (lock) { at(e.clientX); c.setPointerCapture(e.pointerId); } e.preventDefault(); });
+    c.addEventListener('pointermove', e => {
+      if (!drag) return;
+      if (!lock) { const dx = Math.abs(e.clientX - sx), dy = Math.abs(e.clientY - sy); if (dx < 6 && dy < 6) return; lock = dx > dy ? 'x' : 'y'; if (lock === 'x') c.setPointerCapture(e.pointerId); }
+      if (lock === 'x') at(e.clientX);
+    });
+    const end = e => { if (drag && !lock && e.type === 'pointerup') at(e.clientX); drag = false; lock = null; };
+    c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
   });
 
-  /* gallery lightbox */
-  const lb = $('.lb'); let lbItems = [], lbI = 0;
-  function showLb(i) { lbI = (i + lbItems.length) % lbItems.length; $('img', lb).src = lbItems[lbI].href; $('img', lb).alt = $('img', lbItems[lbI]).alt; }
+  /* photo viewer: tap any photo to see it full size */
+  const photos = [...$$('.gal a').map(a => ({ src: a.href, alt: ($('img', a) || {}).alt || '', el: a })),
+    ...$$('.collage img, .ph img').map(img => ({ src: img.currentSrc || img.src, alt: img.alt, el: img }))];
+  let lb = $('.lb'), lbI = 0;
+  if (photos.length && !lb) {
+    lb = document.createElement('div'); lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-label', 'Photo viewer');
+    const ic = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+    lb.innerHTML = `<button class="x" aria-label="Close">${ic('M18 6L6 18M6 6l12 12')}</button><button class="pv" aria-label="Previous">${ic('M15 18l-6-6 6-6')}</button><img alt=""><button class="nx" aria-label="Next">${ic('M9 18l6-6-6-6')}</button>`;
+    document.body.appendChild(lb);
+  }
+  function showLb(i) { lbI = (i + photos.length) % photos.length; const im = $('img', lb); im.src = photos[lbI].src; im.alt = photos[lbI].alt; }
   function closeLb() { if (lb && lb.classList.contains('on')) { lb.classList.remove('on'); lockScroll(false); } }
-  if (lb) {
-    lbItems = $$('.gal a');
-    lbItems.forEach((a, i) => a.addEventListener('click', e => { e.preventDefault(); showLb(i); lb.classList.add('on'); lockScroll(true); }));
+  if (lb && photos.length) {
+    photos.forEach((ph, i) => { ph.el.classList.add('zoom'); ph.el.addEventListener('click', e => { e.preventDefault(); showLb(i); lb.classList.add('on'); lockScroll(true); }); });
     $('.x', lb).addEventListener('click', closeLb);
     $('.pv', lb).addEventListener('click', () => showLb(lbI - 1));
     $('.nx', lb).addEventListener('click', () => showLb(lbI + 1));
     lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
     addEventListener('keydown', e => { if (!lb.classList.contains('on')) return; if (e.key === 'ArrowLeft') showLb(lbI - 1); if (e.key === 'ArrowRight') showLb(lbI + 1); });
+    let tx0 = null; lb.addEventListener('touchstart', e => tx0 = e.touches[0].clientX, { passive: true });
+    lb.addEventListener('touchend', e => { if (tx0 == null) return; const dx = e.changedTouches[0].clientX - tx0; if (Math.abs(dx) > 50) showLb(lbI + (dx < 0 ? 1 : -1)); tx0 = null; });
   }
 
   /* rain */
