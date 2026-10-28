@@ -60,14 +60,33 @@
     burger.setAttribute('aria-expanded', open); lockScroll(open);
   });
   $$('.mnav a').forEach(a => a.addEventListener('click', () => { html.classList.remove('menu-open'); lockScroll(false); }));
+  // Services opens as a drop-down in the phone menu
+  $$('.mtog').forEach(b => b.addEventListener('click', () => {
+    const acc = b.closest('.macc'), open = !acc.classList.contains('open');
+    acc.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
+  }));
 
-  /* quote drawer */
-  const qd = $('#qd');
-  const openQ = e => { if (!qd) return; if (e) e.preventDefault(); html.classList.remove('menu-open'); html.classList.add('qd-open'); lockScroll(true); setTimeout(() => { const f = $('input:not(.hp)', qd); if (f && fine) f.focus(); }, 350); };
-  const closeQ = () => { html.classList.remove('qd-open'); lockScroll(false); };
-  $$('[data-quote]').forEach(b => b.addEventListener('click', openQ));
-  $$('[data-close]').forEach(b => b.addEventListener('click', closeQ));
-  addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeLb(); } });
+  /* quote panel: drops down from under the header (like vantageroofing.ie) */
+  const qd = $('#qdrop');
+  const setQ = open => {
+    if (!qd) return;
+    html.classList.toggle('qdrop-open', open); qd.setAttribute('aria-hidden', String(!open));
+    $$('.qbtn').forEach(b => b.setAttribute('aria-expanded', String(open)));
+    if (open) { html.classList.remove('menu-open'); if (burger) burger.setAttribute('aria-expanded', 'false'); lockScroll(false); }
+    if (open && fine) setTimeout(() => { const f = $('input:not(.hp)', qd); if (f) f.focus({ preventScroll: true }); }, 380);
+  };
+  $$('[data-quote]').forEach(b => b.addEventListener('click', e => {
+    e.preventDefault();
+    const sel = qd && $('select[name=service]', qd); if (sel && b.dataset.svc) sel.value = b.dataset.svc;
+    setQ(b.classList.contains('qbtn') ? !html.classList.contains('qdrop-open') : true);
+  }));
+  $$('[data-qclose]').forEach(b => b.addEventListener('click', () => setQ(false)));
+  document.addEventListener('click', e => { if (html.classList.contains('qdrop-open') && !e.target.closest('.hdr, [data-quote]')) setQ(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') { setQ(false); closeLb(); } });
+  if (location.hash === '#quote') setQ(true);
+
+  /* job clips play while on screen */
+  $$('video[data-autoplay]').forEach(v => new IntersectionObserver(es => es[0].isIntersecting ? v.play().catch(() => {}) : v.pause(), { threshold: 0.25 }).observe(v));
 
   /* forms */
   $$('form[data-form]').forEach(form => {
@@ -122,7 +141,7 @@
   });
 
   /* photo viewer: tap any photo to see it full size */
-  const photos = [...$$('.gal a').map(a => ({ src: a.href, alt: ($('img', a) || {}).alt || '', el: a })),
+  const photos = [...$$('.gal a, .tile').map(a => ({ src: a.href, alt: ($('img', a) || {}).alt || '', el: a })),
     ...$$('.collage img, .ph img').map(img => ({ src: img.currentSrc || img.src, alt: img.alt, el: img }))];
   let lb = $('.lb'), lbI = 0;
   if (photos.length && !lb) {
@@ -170,79 +189,51 @@
   }
   $$('[data-rain]').forEach(el => rainOn(el));
 
-  /* ---------- intro: lightning strikes the logo, then the page lifts up ---------- */
+  /* ---------- intro: slates are laid across the screen from the eaves up,
+     the logo is revealed, then the tiles lift away from the centre to open the page ---------- */
   const loader = $('#loader');
-  let stopIntroRain = null;
-  function finishIntro() { if (stopIntroRain) stopIntroRain(); if (loader) loader.remove(); html.classList.remove('intro', 'intro-out'); heroIn(); if (ST) ScrollTrigger.refresh(); }
-  function boltPath(x0, y0, x1, y1, rough) {
-    // midpoint displacement gives a natural jagged bolt
-    let pts = [[x0, y0], [x1, y1]], d = rough;
-    for (let k = 0; k < 6; k++) {
-      const nx = [];
-      for (let i = 0; i < pts.length - 1; i++) {
-        const [ax, ay] = pts[i], [bx, by] = pts[i + 1];
-        nx.push(pts[i], [(ax + bx) / 2 + rand(-d, d), (ay + by) / 2 + rand(-d, d) * .3]);
-      }
-      nx.push(pts[pts.length - 1]); pts = nx; d *= .55;
-    }
-    return pts;
-  }
-  const toD = pts => 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L');
+  function finishIntro() { if (loader) loader.remove(); html.classList.remove('intro'); heroIn(); if (ST) ScrollTrigger.refresh(); }
   function runIntro() {
     try { sessionStorage.setItem('pcr_intro', '1'); } catch (e) {}
-    if (!loader || !html.classList.contains('intro') || reduce) { finishIntro(); return; }
-    stopIntroRain = rainOn(loader, { always: true, density: 5, speed: 1.5, alpha: 1.5 });
-    const svg = $('svg.bolt', loader), flash = $('.flash', loader), logo = $('.logo', loader);
-    const W = innerWidth, H = innerHeight;
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    const r = logo.getBoundingClientRect();
-    const tx = r.left + r.width * 0.446, ty = r.top + r.height * 0.03; // the roof peak of the logo
-    $$('.ring, .glow', loader).forEach(el => { el.style.left = tx + 'px'; el.style.top = ty + 'px'; });
-    const flashTo = (o, ms) => { flash.style.transition = `opacity ${ms}ms ease-out`; flash.style.opacity = o; };
-    const addBolt = (pts, wd, cls) => {
-      const d = toD(pts);
-      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', cls || '');
-      g.innerHTML = `<path d="${d}" stroke="rgba(99,192,242,.55)" stroke-width="${wd * 7}" filter="url(#glow)"/><path d="${d}" stroke="#d9f1ff" stroke-width="${wd * 2.2}"/><path d="${d}" stroke="#fff" stroke-width="${wd}"/>`;
-      svg.appendChild(g);
-      $$('path', g).forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.getBoundingClientRect(); p.style.transition = 'stroke-dashoffset .16s cubic-bezier(.6,0,.9,.5)'; p.style.strokeDashoffset = 0; });
-      return g;
-    };
-    // distant flicker first
-    setTimeout(() => { flashTo(.12, 60); setTimeout(() => flashTo(0, 300), 70); }, 250);
-    setTimeout(() => { flashTo(.06, 40); setTimeout(() => flashTo(0, 200), 50); }, 480);
-    // the strike
-    setTimeout(() => {
-      const sx = tx + rand(-W * .18, W * .18);
-      const main = boltPath(sx, -20, tx, ty, Math.max(60, W * .07));
-      const groups = [addBolt(main, 2.6)];
-      // forks off the main bolt
-      for (let b = 0; b < 3; b++) {
-        const i = Math.floor(rand(main.length * .2, main.length * .7)), [bx, by] = main[i];
-        groups.push(addBolt(boltPath(bx, by, bx + rand(-W * .22, W * .22), by + rand(H * .08, H * .22), 30), 1.1, 'fork'));
+    if (!loader || !html.classList.contains('intro') || reduce || !loader.animate) { finishIntro(); return; }
+    const host = $('.slates', loader), W = innerWidth, H = innerHeight;
+    const tw = Math.max(64, Math.min(140, W / 8)), th = Math.round(tw * .62), gap = 3;
+    const cols = Math.ceil(W / tw) + 1, rows = Math.ceil(H / th) + 1;
+    const cx = W / 2, cy = H / 2, maxD = Math.hypot(cx, cy), tiles = [];
+    const frag = document.createDocumentFragment();
+    for (let r = 0; r < rows; r++) {
+      const off = r % 2 ? -tw / 2 : 0; // staggered bond, like a real slate roof
+      for (let c = 0; c < cols + (r % 2); c++) {
+        const t = document.createElement('i'), x = c * tw + off, y = r * th;
+        t.className = 'sl' + (Math.random() < .3 ? ' b' : Math.random() < .3 ? ' c' : '');
+        t.style.cssText = `left:${x + gap / 2}px;top:${y + gap / 2}px;width:${tw - gap}px;height:${th - gap}px;opacity:0`;
+        frag.appendChild(t); tiles.push({ t, r, x: x + tw / 2, y: y + th / 2 });
       }
-      setTimeout(() => {
-        flashTo(.9, 30); loader.classList.add('struck');
-        // sparks from the peak
-        for (let s = 0; s < 26; s++) {
-          const sp = document.createElement('i'); sp.className = 'spark'; sp.style.left = tx + 'px'; sp.style.top = ty + 'px'; loader.appendChild(sp);
-          const a = rand(Math.PI * 1.05, Math.PI * 1.95), dist = rand(60, 220);
-          sp.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${Math.cos(a) * dist}px,${Math.sin(a) * dist * .6 + rand(40, 120)}px) scale(.2)`, opacity: 0 }], { duration: rand(500, 900), easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' });
-        }
-        setTimeout(() => flashTo(0, 450), 60);
-        // electricity crackles down both slopes of the logo's roof
-        const L = [r.left + r.width * 0.13, r.top + r.height * 0.47], R = [r.left + r.width * 0.74, r.top + r.height * 0.47];
-        [0, 140, 300].forEach(t => setTimeout(() => {
-          const arcs = [addBolt(boltPath(tx, ty, L[0], L[1], 14), .8, 'fork'), addBolt(boltPath(tx, ty, R[0], R[1], 14), .8, 'fork')];
-          setTimeout(() => arcs.forEach(g => g.remove()), 110);
-        }, t));
-        // bolt flickers out
-        const fl = [[120, .25], [190, 1], [260, .4], [330, 0]];
-        fl.forEach(([t, o]) => setTimeout(() => groups.forEach(g => g.style.opacity = o), t));
-        setTimeout(() => { flashTo(.55, 20); setTimeout(() => flashTo(0, 380), 40); }, 200);
-      }, 150);
-    }, 750);
-    // lift the whole intro up to reveal the home page
-    setTimeout(() => { html.classList.add('intro-out'); heroIn(); setTimeout(finishIntro, 850); }, 2700);
+    }
+    host.appendChild(frag);
+    // 1. laid row by row from the bottom (the eaves) up to the top (the ridge)
+    const layMs = 1000, per = layMs / rows;
+    tiles.forEach(o => o.t.animate(
+      [{ opacity: 0, transform: 'translateY(-46px) rotateX(70deg)' }, { opacity: 1, transform: 'none' }],
+      { duration: 420, delay: (rows - 1 - o.r) * per + (o.x / W) * 120, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }));
+    // 2. light runs across the finished roof and the logo is revealed
+    setTimeout(() => {
+      loader.classList.add('laid');
+      const sh = $('.sheen', loader);
+      if (sh) sh.animate([{ opacity: 0, transform: 'translateX(-70%)' }, { opacity: 1, offset: .2 }, { opacity: 1, offset: .8 }, { opacity: 0, transform: 'translateX(70%)' }], { duration: 1300, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
+    }, layMs + 250);
+    // 3. the tiles lift off from the centre outwards, revealing the home page underneath
+    const openAt = layMs + 1900;
+    setTimeout(() => {
+      loader.classList.add('open'); heroIn();
+      tiles.forEach(o => {
+        const dx = o.x - cx, dy = o.y - cy, d = Math.hypot(dx, dy) / maxD, k = 60 + Math.random() * 80;
+        o.t.animate([{ opacity: 1, transform: 'none' },
+          { opacity: 0, transform: `translate(${dx / (d * maxD || 1) * k}px,${dy / (d * maxD || 1) * k - 30}px) rotateX(${55 + Math.random() * 30}deg) rotateZ(${(Math.random() - .5) * 30}deg) scale(.85)` }],
+          { duration: 650, delay: d * 520, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+      });
+      setTimeout(finishIntro, 1250);
+    }, openAt);
   }
 
   /* split headings into words */

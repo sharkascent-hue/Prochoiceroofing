@@ -155,8 +155,39 @@ STEPS = [('Inspect & Diagnose', 'We inspect your roof, identify the source of th
          ('Repair & Protect', 'Our team completes the roofing work professionally, checks the finished result and leaves your property clean and tidy.')]
 SERVICE_OPTS = ['New Roof Installation', 'Roof Repairs', 'Flat Roofing', 'Chimney Repairs', 'Emergency Roofing', 'Guttering Fascia Soffit']
 
+FAQ = [
+    ('How much does a roof repair cost in Dublin?', 'Most small roof repairs in Dublin, such as replacing slipped tiles or re-sealing flashing, cost a few hundred euro. Larger repairs and replacements depend on the size and condition of the roof. We inspect for free and give you a clear written quote before any work starts.'),
+    ('Do you charge for a roof inspection or quote?', 'No. Roof inspections and written quotations are free, with no call-out fee and no obligation.'),
+    ('Do you do emergency roof repairs?', 'Yes. We are available 24/7 for leaks, storm damage and missing tiles across Dublin, Meath and Louth. We secure the roof first to stop further water damage, then complete the permanent repair.'),
+    ('Which areas do you cover?', 'All of Dublin, including Dublin 15, Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Raheny and Lucan, plus Meath and Louth: Ashbourne, Ratoath, Dunboyne, Navan and Drogheda.'),
+    ('Are you insured?', 'Yes. Pro Choice Roofing is fully insured, and all workmanship is guaranteed.'),
+    ('How long does a new roof take?', 'A typical house re-roof in Dublin takes between three days and a week, depending on size, weather and the roofing system. We give you a timeline with your quote.'),
+]
+AREA_TOWNS = [t for _, ts in AREAS for t in ts] + ['Dublin 15', 'Lucan', 'Finglas', 'Santry', 'Howth', 'Donabate', 'Clonsilla', 'Ongar']
+KW = 'roofers Dublin, roofer Dublin, roof repairs Dublin, roofing contractors Dublin, new roof Dublin, flat roofing Dublin, chimney repairs Dublin, emergency roof repairs Dublin, guttering Dublin, roofers Dublin 15, roofers Meath, roofers Louth'
+
+AREA_LD = ','.join(f'{{"@type":"Place","name":"{t}"}}' for t in ['Dublin', 'County Meath', 'County Louth'] + AREA_TOWNS)
+
 # ---------- building blocks ----------
-def head(p, title, desc, path):
+from PIL import Image
+_DIMS = {}
+def dims(f):
+    if f not in _DIMS:
+        with Image.open(os.path.join(ROOT, 'img', f)) as im: _DIMS[f] = im.size
+    return _DIMS[f]
+
+def pic(p, f, alt, chip='', cls=''):
+    """A photo box shaped like the photo itself, so nothing gets cropped."""
+    w, h = dims(f)
+    c = f'<span class="chip">{chip}</span>' if chip else ''
+    return f'<div class="ph fit{" " + cls if cls else ""}" style="aspect-ratio:{w}/{h}" data-clip><img src="{p}img/{f}" alt="{alt}" width="{w}" height="{h}" loading="lazy">{c}</div>'
+
+def faq_ld():
+    import json
+    return json.dumps({'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in FAQ]})
+
+def head(p, title, desc, path, kw=''):
     canon = SITE + '/' + path
     return f'''<!doctype html>
 <html lang="en-IE">
@@ -165,6 +196,8 @@ def head(p, title, desc, path):
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<meta name="keywords" content="{kw or KW}">
+<meta name="geo.region" content="IE-D"><meta name="geo.placename" content="Dublin"><meta name="geo.position" content="53.4185;-6.3920"><meta name="ICBM" content="53.4185, -6.3920">
 <link rel="canonical" href="{canon}">
 <meta name="theme-color" content="#061630">
 <meta property="og:type" content="website"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">
@@ -172,8 +205,8 @@ def head(p, title, desc, path):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{p}assets/style.css?v=1">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","areaServed":["Dublin","Meath","Louth"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
+<link rel="stylesheet" href="{p}assets/style.css?v=2">
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"sameAs":["https://prochoiceroofing.ie/"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
     def on(k): return ' class="on" aria-current="page"' if k == active else ''
@@ -187,18 +220,21 @@ def header(p, active):
 <div class="dd"><a href="{p}services/"{svc_on}>Services {I['chev']}</a><div class="menu">{menu}</div></div>
 <a href="{p}portfolio/"{on('portfolio')}>Portfolio</a>
 <a href="{p}about/"{on('about')}>About</a>
+<a href="{p}roofers-dublin/"{on('areas')}>Areas</a>
 <a href="{p}contact/"{on('contact')}>Contact</a>
 </nav>
 <a class="tel" href="{TEL}">{I['phone']}<span data-cfg="phone">{PHONE}</span></a>
-<a class="btn btn-blue" href="#quote" data-quote>Request a quote</a>
+<a class="btn btn-blue qbtn" href="#quote" data-quote aria-expanded="false" aria-controls="qdrop"><span class="q1">Get a free quote</span><span class="q2">Free quote</span> {I['chev']}</a>
 <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
-</div></header>
+</div>
+{qdrop(p)}
+</header>
 <nav class="mnav" aria-label="Mobile">
 <a class="ml" href="{p}">Home <small>01</small></a>
-<a class="ml" href="{p}services/">Services <small>02</small></a>
-<div class="subs">{subs}</div>
-<a class="ml" href="{p}portfolio/">Portfolio <small>03</small></a>
-<a class="ml" href="{p}about/">About <small>04</small></a>
+<div class="macc"><button class="ml mtog" type="button" aria-expanded="false">Services <i>{I['right']}</i></button><div class="subs"><a href="{p}services/">All services</a>{subs}</div></div>
+<a class="ml" href="{p}portfolio/">Portfolio <small>02</small></a>
+<a class="ml" href="{p}about/">About <small>03</small></a>
+<a class="ml" href="{p}roofers-dublin/">Areas we cover <small>04</small></a>
 <a class="ml" href="{p}contact/">Contact <small>05</small></a>
 <a class="btn btn-blue" href="#quote" data-quote>Request a free quote</a>
 <a class="btn btn-ghost" href="{TEL}" style="margin-top:12px">{I['phone']} Call {PHONE}</a>
@@ -231,9 +267,17 @@ def form(p, kind='quote', title='Request a free quote', sub='Free, no-obligation
 <p class="fnote">Your details are kept private. See our <a href="{p}privacy-policy/">privacy policy</a>.</p>
 </form>'''
 
-def quote_drawer(p):
-    f = form(p).replace('<form class="formcard"', '<form class="formcard" id="quote"').replace('<h3>', f'<button class="x" type="button" data-close aria-label="Close">{I["x"]}</button><h3>', 1)
-    return f'<div class="qd" id="qd" role="dialog" aria-modal="true" aria-label="Request a quote"><div class="scrim" data-close></div>{f}</div>'
+def qdrop(p):
+    """Quote panel that drops down from under the header (like vantageroofing.ie)."""
+    f = form(p, 'full', 'Get a free quote', 'Free, no-obligation written quote. We aim to reply within 24 hours.').replace('<form class="formcard"', '<form class="formcard" id="quote"')
+    return f'''<div class="qdrop" id="qdrop" aria-hidden="true" data-lenis-prevent><div class="wrap qdgrid">
+<div class="qdside"><span class="eyebrow">Free quotes · no call-out fee</span><h3>Tell us about your roof.</h3>
+<p>Free roof inspection and a clear, written quote before any work starts. Serving Dublin, Meath &amp; Louth.</p>
+<a class="qdl" href="{TEL}">{I['phone']}<span><b>Call {PHONE}</b><small>Available 24/7 for emergencies</small></span></a>
+<a class="qdl wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span><b>WhatsApp a photo</b><small>Quickest way to a price</small></span></a>
+<a class="qdl" href="mailto:{EMAIL}">{I['mail']}<span><b>Email us</b><small>{EMAIL}</small></span></a>
+<button class="qdx" type="button" data-qclose>{I['x']} Close</button></div>
+{f}</div></div>'''
 
 def footer(p):
     svc = ''.join(f'<li><a href="{p}{s["slug"]}/">{s["name"]}</a></li>' for s in SERVICES)
@@ -242,7 +286,7 @@ def footer(p):
 <div><img class="fl" src="{p}img/logo-white.png" alt="Pro Choice Roofing" width="763" height="393" loading="lazy">
 <p>Pro Choice Roofing provides reliable roofing services throughout Dublin and the surrounding areas. Contact our team today for a free quote.</p>
 <span class="h247">{I['clock'].replace('<svg', '<svg width="14" height="14"')} AVAILABLE 24/7</span></div>
-<div><h4>Useful Links</h4><ul><li><a href="{p}">Home</a></li><li><a href="{p}about/">About Us</a></li><li><a href="{p}services/">Services</a></li><li><a href="{p}portfolio/">Our Portfolio</a></li><li><a href="{p}contact/">Contact Us</a></li></ul></div>
+<div><h4>Useful Links</h4><ul><li><a href="{p}">Home</a></li><li><a href="{p}about/">About Us</a></li><li><a href="{p}services/">Services</a></li><li><a href="{p}portfolio/">Our Portfolio</a></li><li><a href="{p}roofers-dublin/">Roofers in Dublin</a></li><li><a href="{p}contact/">Contact Us</a></li></ul></div>
 <div><h4>Services</h4><ul>{svc}</ul></div>
 <div><h4>Contact Info</h4><ul class="ci">
 <li>{I['pin']}<span>20 Mount Eustace Crescent<br>Dublin 15, D15 RY6R, Ireland</span></li>
@@ -259,20 +303,21 @@ def scripts(p):
     return f'''<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="{p}assets/site.js?v=1" defer></script>'''
+<script src="{p}assets/site.js?v=2" defer></script>'''
 
-def page(path, active, title, desc, body, intro=False):
+def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
-    head_html = head(p, title, desc, path)
+    head_html = head(p, title, desc, path, kw)
+    if ld:
+        head_html += f'\n<script type="application/ld+json">{ld}</script>'
     if intro:
         head_html += '\n<script>try{if(!sessionStorage.getItem("pcr_intro")||/[?&]intro/.test(location.search))document.documentElement.classList.add("intro")}catch(e){document.documentElement.classList.add("intro")}</script>'
     loader = ''
     if intro:
-        loader = f'''<div id="loader" aria-hidden="true"><div class="sky"></div><i class="glow"></i>
-<i class="ring"></i><i class="ring r2"></i>
-<div class="box"><div class="logo"><img class="off" src="{p}img/logo-white.png" alt=""><img class="on" src="{p}img/logo-white.png" alt=""></div><div class="lt">Roofing excellence, built to last</div></div>
-<svg class="bolt"><defs><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs></svg>
-<div class="flash"></div></div>'''
+        # intro: slates are laid across the screen from the eaves up, the logo is revealed, then the tiles lift away
+        loader = f'''<div id="loader" aria-hidden="true"><div class="slates"></div>
+<i class="sheen"></i>
+<div class="box"><div class="logo"><img src="{p}img/logo-white.png" alt=""></div><div class="lt">Roofing excellence, built to last</div></div></div>'''
     html = f'''{head_html}
 </head>
 <body>
@@ -282,7 +327,6 @@ def page(path, active, title, desc, body, intro=False):
 {body(p)}
 </main>
 {footer(p)}
-{quote_drawer(p)}
 {scripts(p)}
 </body>
 </html>
@@ -356,7 +400,14 @@ def reviews():
 <div class="rhead"><span class="stars">★★★★★</span><b>5.0</b><span style="font-size:.85rem;color:rgba(255,255,255,.7)">Rated 5/5 · Excellent</span></div></div></div>
 <div class="rgrid" data-reveal="group">{r}</div></div></section>'''
 
-def areas():
+def faq(dark=False):
+    q = ''.join(f'<details class="qa"><summary>{a}<i>{I["chev"]}</i></summary><p>{b}</p></details>' for a, b in FAQ)
+    return f'''<section class="sec{' soft' if not dark else ' deep'}" id="faq"><div class="wrap split" style="align-items:start">
+<div><span class="eyebrow">FAQ</span><h2 data-split>Roofing questions, answered.</h2>
+<p>The questions Dublin homeowners ask us most. Anything else, call us on <a class="blue" href="{TEL}"><b>{PHONE}</b></a>.</p></div>
+<div class="faq" data-reveal>{q}</div></div></section>'''
+
+def areas(p, more=True):
     a = ''.join(f'<div class="area"><h3>{I["pin"]}{t}</h3><div class="chips">{"".join(f"<span>{x}</span>" for x in xs)}</div></div>' for t, xs in AREAS)
     return f'''<section class="sec"><div class="wrap">
 <span class="eyebrow">Areas we serve</span><h2 data-split style="max-width:20ch">Professional roofing across Dublin and surrounding areas.</h2>
@@ -364,6 +415,7 @@ def areas():
 <div class="areas" data-reveal="group">{a}</div>
 <div class="callcard" data-reveal><div><h3>Not sure if we cover your area?</h3><p>Call our roofing team and we will be happy to help.</p></div>
 <a class="btn btn-white" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
+{f'<p style="margin-top:22px"><a class="tlink" href="{p}roofers-dublin/">Roofers in Dublin: every area we cover {I["arrow"]}</a></p>' if more else ''}
 </div></section>'''
 
 def cta(p):
@@ -385,8 +437,8 @@ def talk(p):
 # ---------- pages ----------
 def home(p):
     trust = ''.join(f'<li>{I["check"]}{t}</li>' for t in ['Free Roof Inspections & Fixed Quotes', 'Fully Insured Roofing Specialists', 'Quality Workmanship, Fully Guaranteed'])
-    return f'''<section class="hero" data-rain>
-<img class="bg" src="{p}img/roof-1.jpg" alt="" fetchpriority="high">
+    return f'''<section class="hero hvid" data-rain>
+<video class="bg" poster="{p}video/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video>
 <div class="wrap">
 <div>
 <div class="gbadge"><span class="stars">★★★★★</span><b>5/5</b> Rated excellent by Dublin homeowners</div>
@@ -396,10 +448,13 @@ def home(p):
 <div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{p}portfolio/">Our work</a></div>
 <ul class="trust">{trust}</ul>
 </div>
-<div class="vwrap"><span class="frame"></span>
-<div class="vcard"><video src="{p}img/hero.mp4" poster="{p}img/hero-poster.jpg" muted loop playsinline preload="metadata" aria-label="Pro Choice Roofing re-roofing a house"></video></div>
-<span class="tag"><i></i>Recent work</span>
-<div class="pill"><i>{I['bolt']}</i><div><b>24/7 call-outs</b><span>Emergency roof repairs</span></div></div>
+<div class="hcard">
+<span class="live"><i></i>Available 24/7</span>
+<h2>Free roof inspection &amp; quote</h2>
+<ul class="ticks">{''.join(f"<li>{I['check']}{t}</li>" for t in ['No call-out fee', 'Clear written quote before work starts', 'Fully insured, work guaranteed', 'Emergency repairs, day or night'])}</ul>
+<a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['chev']}</a>
+<a class="btn btn-ghost" href="{TEL}">{I['phone']} {PHONE}</a>
+<div class="hrev"><span class="stars">★★★★★</span><q>The rain has been torrential and the roof has stood the test. Great work. Great company.</q><span>Nathan Power · Google review</span></div>
 </div>
 </div>
 <div class="scroll">Scroll</div>
@@ -417,10 +472,10 @@ def home(p):
 <div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div>
 </div>
 <div class="collage">
-<figure data-clip><img src="{p}img/roofer-dublin.jpg" alt="Pro Choice roofer at work in Dublin" loading="lazy"></figure>
-<figure data-clip><img src="{p}img/roof-installation.jpg" alt="New tiled roof being installed" loading="lazy"></figure>
-<figure data-clip><img src="{p}img/roof-installation-2.jpg" alt="Roofers fitting a new tile roof" loading="lazy"></figure>
-<figure data-clip><img src="{p}img/roof-cleaning.jpg" alt="Roof cleaning in progress" loading="lazy"></figure>
+<figure data-clip><img src="{p}img/roofer-dublin.jpg" alt="Pro Choice roofer at work in Dublin" width="1280" height="1454" loading="lazy"></figure>
+<figure data-clip><img src="{p}img/roof-installation.jpg" alt="New tiled roof being installed" width="600" height="450" loading="lazy"></figure>
+<figure data-clip><img src="{p}img/roof-installation-2.jpg" alt="Roofers fitting a new tile roof" width="600" height="450" loading="lazy"></figure>
+<figure data-clip><img src="{p}img/roof-cleaning.jpg" alt="Roof cleaning in progress" width="600" height="450" loading="lazy"></figure>
 </div>
 </div></section>
 <section class="sec dark weather" data-rain><div class="big" aria-hidden="true">IRISH WEATHER</div><div class="wrap split rev">
@@ -432,7 +487,11 @@ def home(p):
 <div class="callrow"><a class="btn btn-blue" href="#quote" data-quote>Get a quote {I['arrow']}</a>
 <div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div>
 </div>
-<div class="ph tall" data-clip><img src="{p}img/after-2.jpg" alt="Finished new roof by Pro Choice Roofing" loading="lazy"><span class="chip">{I['shield']}Quality workmanship, fully guaranteed</span></div>
+<div class="vwrap"><span class="frame"></span>
+<div class="vcard"><video src="{p}img/hero.mp4" poster="{p}img/hero-poster.jpg" muted loop playsinline preload="metadata" data-autoplay aria-label="Pro Choice Roofing re-roofing a house"></video></div>
+<span class="tag"><i></i>On the job</span>
+<div class="pill"><i>{I['bolt']}</i><div><b>24/7 call-outs</b><span>Emergency roof repairs</span></div></div>
+</div>
 </div></section>
 {services_grid(p, imgs='card')}
 {before_after(p, soft=True)}
@@ -444,7 +503,7 @@ def home(p):
 <ul class="ticks"><li>{I['mail']}<a href="mailto:{EMAIL}" data-cfg="email">{EMAIL}</a></li><li>{I['phone']}<a href="{TEL}" data-cfg="phone">{PHONE}</a></li><li>{I['pin']}20 Mount Eustace Crescent, Dublin 15</li></ul>
 <a class="btn btn-line" href="{p}contact/">Get a quote {I['arrow']}</a>
 </div>
-<div class="ph" data-clip><img src="{p}img/roof-6.jpg" alt="Pro Choice roofers fitting a Velux window on a slate roof" loading="lazy"><span class="chip">{I['star']}5-star rated on Google</span></div>
+{pic(p, 'roof-6.jpg', 'Pro Choice roofers fitting a Velux window on a slate roof in Dublin', I['star'] + '5-star rated on Google')}
 </div></section>
 {reviews()}
 <section class="sec soft"><div class="wrap split">
@@ -457,14 +516,15 @@ def home(p):
 </div>
 <div data-reveal>{form(p, 'quote', 'Get a quote')}</div>
 </div></section>
-{areas()}
+{areas(p)}
+{faq()}
 {steps()}
 {cta(p)}'''
 
 def services_page(p):
     details = ''
     for i, s in enumerate(SERVICES, 1):
-        details += f'''<div class="sdetail"><div class="ph" data-clip><img src="{p}img/{s['card']}" alt="{s['name']} by Pro Choice Roofing" loading="lazy"></div>
+        details += f'''<div class="sdetail">{pic(p, s['card'], s['name'] + ' by Pro Choice Roofing, Dublin')}
 <div><div class="bign">0{i}</div><h2 style="font-size:clamp(1.6rem,2.6vw,2.2rem)">{s['name']}</h2><p>{s['summary']}</p>
 <ul class="ticks">{''.join(f"<li>{I['check']}{f[1]}</li>" for f in s['feats'])}</ul>
 <a class="btn btn-blue" href="{p}{s['slug']}/">View service {I['arrow']}</a></div></div>'''
@@ -477,6 +537,7 @@ def services_page(p):
 {steps()}
 {cta(p)}'''
 
+SVC_OPT = dict(zip([s['slug'] for s in SERVICES], [SERVICE_OPTS[i] for i in (0, 1, 2, 5, 3, 4)]))
 def service_page(s):
     def body(p):
         feats_html = ''.join(f'<div class="card"><span class="ico">{I[a]}</span><h3>{b}</h3><p>{c}</p></div>' for a, b, c in s['feats'])
@@ -490,12 +551,12 @@ def service_page(s):
         others = [o for o in SERVICES if o is not s]
         other_cards = ''.join(f'''<a class="scard" href="{p}{o['slug']}/" style="min-height:300px"><img src="{p}img/{o['card']}" alt="" loading="lazy"><span class="go">{I['arrow']}</span><h3>{o['name']}</h3><span class="tlink">View service {I['arrow']}</span></a>''' for o in others[:3])
         ce, ch, ct = s['close']
-        return f'''{phero(p, [('Services', 'services/'), (s['name'], s['slug'] + '/')], s['h1'], s['lead'], s['card'], f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} Call {PHONE}</a></div>')}
+        return f'''{phero(p, [('Services', 'services/'), (s['name'], s['slug'] + '/')], s['h1'], s['lead'], s['card'], f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote data-svc="{SVC_OPT[s['slug']]}">Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} Call {PHONE}</a></div>')}
 {marquee()}
 <section class="sec"><div class="wrap split">
 <div><span class="eyebrow">{s['eyebrow']}</span><h2 data-split>{s['h2']}</h2>{paras}
-<div class="callrow"><a class="btn btn-blue" href="#quote" data-quote>Request a quote {I['arrow']}</a><div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div></div>
-<div class="ph tall" data-clip><img src="{p}img/{s['img']}" alt="{s['name']} in Dublin by Pro Choice Roofing" loading="lazy"><span class="chip">{I[s['icon']]}{s['name']}</span></div>
+<div class="callrow"><a class="btn btn-blue" href="#quote" data-quote data-svc="{SVC_OPT[s['slug']]}">Request a quote {I['arrow']}</a><div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div></div>
+{pic(p, s['img'], s['name'] + ' in Dublin by Pro Choice Roofing', I[s['icon']] + s['name'])}
 </div></section>
 <section class="sec soft"><div class="wrap">
 <div class="center" style="margin-bottom:48px"><span class="eyebrow">{s['feats_eyebrow']}</span><h2 data-split>{s['feats_title']}.</h2></div>
@@ -524,7 +585,7 @@ def about_page(p):
 <p>We specialise in new roof installations, roof repairs, flat roofing, chimney repairs, emergency roofing and guttering, fascia and soffit work. Every project is approached carefully, with close attention paid to weatherproofing, drainage, ventilation and the details that protect a property over the long term.</p>
 <p>Whether you have discovered a leak, need an ageing roof replaced or want professional advice before starting a project, Pro Choice Roofing is ready to help. Contact us to arrange an assessment and receive a free written quotation.</p>
 <div class="btn-row" style="margin-top:26px"><a class="btn btn-blue" href="{p}portfolio/">Our projects {I['arrow']}</a><a class="btn btn-line" href="{p}contact/">Contact us</a></div></div>
-<div class="ph tall" data-clip><img src="{p}img/roof-5.jpg" alt="Newly tiled roof by Pro Choice Roofing" loading="lazy"><span class="chip">{I['shield']}Fully insured roofing specialists</span></div>
+{pic(p, 'roof-5.jpg', 'Newly tiled roof by Pro Choice Roofing in Dublin', I['shield'] + 'Fully insured roofing specialists')}
 </div></section>
 {feats()}
 <section class="sec"><div class="wrap">
@@ -536,30 +597,54 @@ def about_page(p):
 {steps()}
 {cta(p)}'''
 
+GALLERY = ['roof-6.jpg', 'roof-4.jpg', 'after-3.jpg', 'roof-5.jpg', 'roof-2.jpg', 'after-2.jpg', 'roof-3.jpg', 'roof-1.jpg', 'after-1.jpg', 'before-2.jpg', 'after-4.jpg', 'roof-cleaning.jpg']
 def portfolio_page(p):
-    gal = ['after-2.jpg', 'roof-6.jpg', 'roofer-dublin.jpg', 'roof-5.jpg', 'roof-1.jpg', 'after-3.jpg', 'roof-2.jpg', 'roof-3.jpg', 'after-1.jpg', 'roof-4.jpg', 'after-4.jpg', 'chimney-repairs.jpg', 'flat-roofing.jpg', 'guttering.jpg', 'roof-cleaning.jpg']
-    g = ''.join(f'<a href="{p}img/{x}"><img src="{p}img/{x}" alt="Roofing project by Pro Choice Roofing" loading="lazy"></a>' for x in gal)
-    return f'''{phero(p, [('Portfolio', 'portfolio/')], 'Our portfolio.', 'Real roofs, real results. A look at recent roofing projects completed by the Pro Choice team across Dublin and the surrounding areas.', 'after-2.jpg')}
-{before_after(p, grid=True)}
-<section class="sec soft"><div class="wrap">
-<div class="sec-head"><div><span class="eyebrow">Gallery</span><h2 data-split>Recent jobs.</h2></div><p>Tap a photo to see it full size.</p></div>
-<div class="gal">{g}</div></div></section>
+    g = ''.join(f'<a class="tile" href="{p}img/{x}"><img src="{p}img/{x}" alt="Roofing project in Dublin by Pro Choice Roofing" width="{dims(x)[0]}" height="{dims(x)[1]}" loading="lazy"></a>' for x in GALLERY)
+    return f'''{phero(p, [('Portfolio', 'portfolio/')], 'Our portfolio.', 'Real roofs, real results. Recent roofing projects completed by the Pro Choice team across Dublin and the surrounding areas.', 'after-2.jpg')}
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div><span class="eyebrow">Gallery</span><h2 data-split>Recent jobs.</h2></div><p>Tap any photo to see it full size.</p></div>
+<div class="boxes" data-reveal="group">{g}</div></div></section>
+{before_after(p, grid=True, soft=True)}
 {cta(p)}'''
 
 def contact_page(p):
-    return f'''{phero(p, [('Contact', 'contact/')], 'Contact info.', 'Urgent roof repair, new roof installation or a free quotation for planned work, Pro Choice Roofing is ready to help.', 'roof-6.jpg')}
-<section class="sec" style="padding-top:0"><div class="wrap">
-<div class="info" data-reveal="group">
-<div class="ic"><span class="ico">{I['pin']}</span><div><h3>Our Address</h3><p>20 Mount Eustace Crescent<br>Dublin 15, D15 RY6R<br>Ireland</p></div></div>
-<a href="{TEL}"><span class="ico">{I['phone']}</span><div><h3>Phone Number</h3><p data-cfg="phone">{PHONE}</p><p style="font-size:.85rem">Available 24/7</p></div></a>
-<a href="mailto:{EMAIL}"><span class="ico">{I['mail']}</span><div><h3>Email Address</h3><p data-cfg="email" style="word-break:break-all">{EMAIL}</p></div></a>
-</div>
-<div class="split" style="margin-top:80px;align-items:start">
-<div><span class="eyebrow">Get in touch</span><h2 data-split>Get in touch.</h2>
-<p>Whether you need an urgent roof repair, a new roof installation or a free quotation for planned roofing work, Pro Choice Roofing is ready to help. Complete the form or call us on <a class="blue" href="{TEL}"><b>{PHONE}</b></a>. Tell us about the problem and our team will get back to you as soon as possible.</p>
-<div class="map" style="margin-top:28px"><iframe title="Pro Choice Roofing location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=20%20Mount%20Eustace%20Crescent%2C%20Dublin%2015%2C%20D15%20RY6R&amp;z=14&amp;output=embed"></iframe></div></div>
-<div data-reveal>{form(p, 'full', 'Send us a message', 'Free, no-obligation quotation. We aim to respond within 24 hours.')}</div>
-</div></div></section>
+    return f'''<section class="phero chero" data-rain>
+<img class="bg" src="{p}img/roof-6.jpg" alt="" fetchpriority="high">
+<div class="wrap chgrid">
+<div class="chhead"><div class="crumb"><a href="{p}">Home</a><span>/</span><b>Contact</b></div>
+<h1>Get a free roofing quote.</h1>
+<p class="lead">Urgent roof repair, a new roof or a quote for planned work: tell us about it and we will get back to you within 24 hours.</p></div>
+<div class="chform">{form(p, 'full', 'Send us a message', 'Free, no-obligation quotation. We aim to respond within 24 hours.')}</div>
+<ul class="clist">
+<li><a href="{TEL}">{I['phone']}<span><small>Call us · 24/7</small><b data-cfg="phone">{PHONE}</b></span></a></li>
+<li><a href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span><small>WhatsApp</small><b>Send us a photo</b></span></a></li>
+<li><a href="mailto:{EMAIL}">{I['mail']}<span><small>Email</small><b data-cfg="email">{EMAIL}</b></span></a></li>
+<li><span class="nolink">{I['pin']}<span><small>Address</small><b>20 Mount Eustace Crescent, Dublin 15, D15 RY6R</b></span></span></li>
+</ul>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div><span class="eyebrow">Find us</span><h2 data-split>Based in Dublin 15.</h2></div><p>We cover all of Dublin, Meath and Louth. Not sure if we cover you? Call <a class="blue" href="{TEL}"><b>{PHONE}</b></a>.</p></div>
+<div class="map"><iframe title="Pro Choice Roofing location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=20%20Mount%20Eustace%20Crescent%2C%20Dublin%2015%2C%20D15%20RY6R&amp;z=14&amp;output=embed"></iframe></div>
+</div></section>
+{cta(p)}'''
+
+def dublin_page(p):
+    towns = ''.join(f'<span>{t}</span>' for t in sorted(set(AREA_TOWNS)))
+    return f'''{phero(p, [('Roofers in Dublin', 'roofers-dublin/')], 'Roofers in Dublin you can rely on.', 'Pro Choice Roofing is a Dublin 15 roofing company covering every part of Dublin, plus Meath and Louth. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.', 'roof-6.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+{marquee()}
+<section class="sec"><div class="wrap split">
+<div><span class="eyebrow">Local Dublin roofers</span><h2 data-split>A roofing company based in Dublin 15.</h2>
+<p>We are based at Mount Eustace in Dublin 15, so we can be with you quickly anywhere in Dublin, from Blanchardstown, Castleknock and Clonsilla to Swords, Malahide, Clontarf and the city centre.</p>
+<p>Dublin roofs take a beating from the Irish weather. Most of the calls we get are for slipped and broken tiles, leaks around chimneys and Velux windows, worn flat roofs on extensions and blocked or leaking gutters. We find the cause, fix it properly and give you a written quote before any work starts.</p>
+<p>Whether it is a quick repair, a full re-roof or an emergency after a storm, you deal directly with an experienced, fully insured roofer.</p>
+<div class="chips big">{towns}</div>
+<div class="callrow"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div></div>
+{pic(p, 'roof-4.jpg', 'Pro Choice roofers re-tiling a house in Dublin', I['pin'] + 'Dublin, Meath &amp; Louth')}
+</div></section>
+{services_grid(p, title='Roofing services across Dublin.', imgs='card')}
+{areas(p, more=False)}
+{reviews()}
+{faq()}
 {cta(p)}'''
 
 COOKIES = [('pcr_intro', 'Session storage', 'Remembers that the opening animation has already played, so it only shows once per visit.', 'End of session')]
@@ -606,13 +691,23 @@ def privacy_page(p):
 
 if __name__ == '__main__':
     T = ' | Pro Choice Roofing'
-    page('', 'home', 'Roof Repair And Replacement Experts In Dublin - Pro Choice Roofing',
-         'Pro Choice Roofing: reliable roofing and roof repair contractors in Dublin. New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency repairs. Free quotes.', home, intro=True)
-    page('services/', 'services', 'Roofing Services Dublin' + T, 'New roof installations, roof repairs, flat roofing, guttering, fascia & soffits, chimney repairs and emergency roof repairs across Dublin.', services_page)
+    import json
+    pages = []
+    def P(path, *a, **k): pages.append(path); page(path, *a, **k)
+    P('', 'home', 'Roofers Dublin | Roof Repairs & New Roofs | Pro Choice Roofing',
+      'Pro Choice Roofing: trusted roofers in Dublin 15 covering all of Dublin, Meath and Louth. Roof repairs, new roofs, flat roofing, chimneys, guttering and 24/7 emergency repairs. Free quotes.', home, intro=True, ld=faq_ld())
+    P('services/', 'services', 'Roofing Services Dublin' + T, 'New roof installations, roof repairs, flat roofing, guttering, fascia & soffits, chimney repairs and emergency roof repairs across Dublin.', services_page)
     for s in SERVICES:
-        page(s['slug'] + '/', 'services', s['h1'].rstrip('.').replace(' Dublin', ' Dublin') + T, s['summary'], service_page(s))
-    page('portfolio/', 'portfolio', 'Our Portfolio' + T, 'Before and after roofing projects and recent jobs by Pro Choice Roofing in Dublin.', portfolio_page)
-    page('about/', 'about', 'About Us' + T, 'Pro Choice Roofing: reliable, experienced roofers for homes and businesses across North Dublin, Meath and Louth.', about_page)
-    page('contact/', 'contact', 'Contact Us' + T, 'Contact Pro Choice Roofing for a free roofing quote. Call 087 438 5708 or email prochoiceroofers@gmail.com.', contact_page)
-    page('cookie-policy/', '', 'Cookie Policy' + T, 'How the Pro Choice Roofing website uses cookies.', cookie_page)
-    page('privacy-policy/', '', 'Privacy Policy' + T, 'How Pro Choice Roofing handles your personal information.', privacy_page)
+        P(s['slug'] + '/', 'services', s['h1'].rstrip('.') + ', Meath & Louth' + T, s['summary'], service_page(s),
+          kw=f"{s['name'].lower()} Dublin, {s['short'].lower()} Dublin, roofers Dublin, roofing contractors Dublin, {s['name'].lower()} Meath, {s['name'].lower()} Louth")
+    P('roofers-dublin/', 'areas', 'Roofers in Dublin | Local Dublin 15 Roofing Company' + T, 'Local roofers in Dublin 15 covering Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Lucan and all of Dublin, plus Meath and Louth. Free quotes, 24/7 emergency repairs.', dublin_page, ld=faq_ld())
+    P('portfolio/', 'portfolio', 'Roofing Projects Dublin: Before & After' + T, 'Before and after roofing projects and recent jobs by Pro Choice Roofing in Dublin.', portfolio_page)
+    P('about/', 'about', 'About Our Dublin Roofers' + T, 'Pro Choice Roofing: reliable, experienced roofers for homes and businesses across North Dublin, Meath and Louth.', about_page)
+    P('contact/', 'contact', 'Contact Us: Free Roofing Quote Dublin' + T, 'Contact Pro Choice Roofing for a free roofing quote in Dublin. Call 087 438 5708, WhatsApp or email prochoiceroofers@gmail.com.', contact_page)
+    P('cookie-policy/', '', 'Cookie Policy' + T, 'How the Pro Choice Roofing website uses cookies.', cookie_page)
+    P('privacy-policy/', '', 'Privacy Policy' + T, 'How Pro Choice Roofing handles your personal information.', privacy_page)
+    with open(os.path.join(ROOT, 'sitemap.xml'), 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
+            f'<url><loc>{SITE}/{x}</loc><priority>{"1.0" if not x else "0.9" if x in ("roofers-dublin/", "services/") else "0.6" if "policy" in x else "0.8"}</priority></url>\n' for x in pages) + '</urlset>\n')
+    with open(os.path.join(ROOT, 'robots.txt'), 'w') as f:
+        f.write(f'User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n')
