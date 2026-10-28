@@ -13,8 +13,9 @@
 <meta property="og:image" content="https://prochoiceroofing.ie/img/after-2.jpg"><meta property="og:url" content="https://prochoiceroofing.ie/"><meta property="og:locale" content="en_IE">
 <link rel="icon" href="img/icon-192.png"><link rel="apple-touch-icon" href="img/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
+<link rel="stylesheet" href="assets/style.css?v=5">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"https://prochoiceroofing.ie/","telephone":"+353874385708","email":"prochoiceroofers@gmail.com","image":"https://prochoiceroofing.ie/img/after-2.jpg","logo":"https://prochoiceroofing.ie/img/logo.png","address":{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920},"areaServed":[{"@type":"Place","name":"Dublin"},{"@type":"Place","name":"County Meath"},{"@type":"Place","name":"County Louth"},{"@type":"Place","name":"Swords"},{"@type":"Place","name":"Malahide"},{"@type":"Place","name":"Portmarnock"},{"@type":"Place","name":"Skerries"},{"@type":"Place","name":"Rush"},{"@type":"Place","name":"Balbriggan"},{"@type":"Place","name":"Dublin City"},{"@type":"Place","name":"Clontarf"},{"@type":"Place","name":"Raheny"},{"@type":"Place","name":"Artane"},{"@type":"Place","name":"Blanchardstown"},{"@type":"Place","name":"Castleknock"},{"@type":"Place","name":"Ashbourne"},{"@type":"Place","name":"Ratoath"},{"@type":"Place","name":"Dunboyne"},{"@type":"Place","name":"Navan"},{"@type":"Place","name":"Drogheda"},{"@type":"Place","name":"Laytown"},{"@type":"Place","name":"Dublin 15"},{"@type":"Place","name":"Lucan"},{"@type":"Place","name":"Finglas"},{"@type":"Place","name":"Santry"},{"@type":"Place","name":"Howth"},{"@type":"Place","name":"Donabate"},{"@type":"Place","name":"Clonsilla"},{"@type":"Place","name":"Ongar"}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"sameAs":["https://prochoiceroofing.ie/"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does a roof repair cost in Dublin?", "acceptedAnswer": {"@type": "Answer", "text": "Most small roof repairs in Dublin, such as replacing slipped tiles or re-sealing flashing, cost a few hundred euro. Larger repairs and replacements depend on the size and condition of the roof. We inspect for free and give you a clear written quote before any work starts."}}, {"@type": "Question", "name": "Do you charge for a roof inspection or quote?", "acceptedAnswer": {"@type": "Answer", "text": "No. Roof inspections and written quotations are free, with no call-out fee and no obligation."}}, {"@type": "Question", "name": "Do you do emergency roof repairs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We are available 24/7 for leaks, storm damage and missing tiles across Dublin, Meath and Louth. We secure the roof first to stop further water damage, then complete the permanent repair."}}, {"@type": "Question", "name": "Which areas do you cover?", "acceptedAnswer": {"@type": "Answer", "text": "All of Dublin, including Dublin 15, Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Raheny and Lucan, plus Meath and Louth: Ashbourne, Ratoath, Dunboyne, Navan and Drogheda."}}, {"@type": "Question", "name": "Are you insured?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pro Choice Roofing is fully insured, and all workmanship is guaranteed."}}, {"@type": "Question", "name": "How long does a new roof take?", "acceptedAnswer": {"@type": "Answer", "text": "A typical house re-roof in Dublin takes between three days and a week, depending on size, weather and the roofing system. We give you a timeline with your quote."}}]}</script>
 <script>try{if(!sessionStorage.getItem("pcr_intro")||/[?&]intro/.test(location.search))document.documentElement.classList.add("intro")}catch(e){document.documentElement.classList.add("intro")}</script>
@@ -22,7 +23,63 @@
 <body>
 <div id="loader" aria-hidden="true"><div class="slates"></div>
 <i class="sheen"></i>
-<div class="box"><div class="logo"><img src="img/logo-white.png" alt=""></div><div class="lt">Roofing excellence, built to last</div></div></div>
+<div class="box"><div class="logo"><img src="img/logo-white.png" alt=""></div><div class="lt">Roofing excellence, built to last</div></div></div><script>/* Opening animation. Inlined straight after the loader markup so it starts the moment
+   the page arrives, without waiting for fonts or the animation libraries. */
+(function () {
+  const html = document.documentElement, loader = document.getElementById('loader');
+  const $ = (s, c = document) => c.querySelector(s), $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, touch = !matchMedia('(pointer: fine)').matches;
+  const signal = n => { window['__intro_' + n] = 1; dispatchEvent(new Event('intro:' + n)); };
+  /* ---------- intro: slates are laid across the screen from the eaves up,
+     the logo is revealed, then the tiles lift away from the centre to open the page ---------- */
+  function finishIntro() { if (typeof stopIntroRain === 'function') stopIntroRain(); if (loader) loader.remove(); html.classList.remove('intro', 'intro-out'); signal('done'); }
+  function runIntro() {
+    try { sessionStorage.setItem('pcr_intro', '1'); } catch (e) {}
+    if (!loader || !html.classList.contains('intro') || reduce || !loader.animate) { finishIntro(); return; }
+    const host = $('.slates', loader), W = innerWidth, H = innerHeight;
+    const tw = touch ? Math.max(76, W / 5) : Math.max(64, Math.min(140, W / 8)), th = Math.round(tw * .62), gap = 3;
+    const cols = Math.ceil(W / tw) + 1, rows = Math.ceil(H / th) + 1;
+    const cx = W / 2, cy = H / 2, maxD = Math.hypot(cx, cy), tiles = [];
+    const frag = document.createDocumentFragment();
+    for (let r = 0; r < rows; r++) {
+      const off = r % 2 ? -tw / 2 : 0; // staggered bond, like a real slate roof
+      for (let c = 0; c < cols + (r % 2); c++) {
+        const t = document.createElement('i'), x = c * tw + off, y = r * th;
+        t.className = 'sl' + (Math.random() < .3 ? ' b' : Math.random() < .3 ? ' c' : '');
+        t.style.cssText = `left:${x + gap / 2}px;top:${y + gap / 2}px;width:${tw - gap}px;height:${th - gap}px;opacity:0`;
+        frag.appendChild(t); tiles.push({ t, r, x: x + tw / 2, y: y + th / 2 });
+      }
+    }
+    host.appendChild(frag);
+    // 1. laid row by row from the bottom (the eaves) up to the top (the ridge)
+    const layMs = 700, per = layMs / rows;
+    tiles.forEach(o => o.t.animate(
+      [{ opacity: 0, transform: touch ? 'translateY(-40px)' : 'translateY(-46px) rotateX(70deg)' }, { opacity: 1, transform: 'none' }],
+      { duration: 380, delay: (rows - 1 - o.r) * per + (o.x / W) * 100, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }));
+    // 2. light runs across the finished roof and the logo is revealed
+    setTimeout(() => {
+      loader.classList.add('laid');
+      const sh = $('.sheen', loader);
+      if (sh) sh.animate([{ opacity: 0, transform: 'translateX(-70%)' }, { opacity: 1, offset: .2 }, { opacity: 1, offset: .8 }, { opacity: 0, transform: 'translateX(70%)' }], { duration: 1000, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
+    }, layMs + 120);
+    // 3. the tiles lift off from the centre outwards, revealing the home page underneath
+    const openAt = layMs + 1250;
+    setTimeout(() => {
+      loader.classList.add('open'); signal('open');
+      tiles.forEach(o => {
+        const dx = o.x - cx, dy = o.y - cy, d = Math.hypot(dx, dy) / maxD, k = 60 + Math.random() * 80;
+        o.t.animate([{ opacity: 1, transform: 'none' },
+          { opacity: 0, transform: `translate(${dx / (d * maxD || 1) * k}px,${dy / (d * maxD || 1) * k - 30}px) ${touch ? '' : `rotateX(${55 + Math.random() * 30}deg) `}rotateZ(${(Math.random() - .5) * 30}deg) scale(.85)` }],
+          { duration: 520, delay: d * 380, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+      });
+      setTimeout(finishIntro, 950);
+    }, openAt);
+  }
+
+  runIntro();
+})();
+</script>
 <header class="hdr"><div class="wrap">
 <a class="brand" href="" aria-label="Pro Choice Roofing home"><img src="img/logo-white.png" alt="Pro Choice Roofing" width="763" height="393"></a>
 <nav class="nav" aria-label="Main">
@@ -234,6 +291,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="assets/site.js?v=4" defer></script>
+<script src="assets/site.js?v=5" defer></script>
 </body>
 </html>

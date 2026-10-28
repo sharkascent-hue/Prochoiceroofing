@@ -67,9 +67,9 @@ html.intro body{overflow:hidden}
 #loader.laid .box::before{opacity:1}
 #loader .logo{position:relative;width:min(72vw,440px);clip-path:inset(0 100% 0 0)}
 #loader .logo img{width:100%;height:auto}
-#loader.laid .logo{clip-path:inset(0 0 0 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1)}
+#loader.laid .logo{clip-path:inset(0 0 0 0);transition:clip-path .75s cubic-bezier(.7,0,.2,1)}
 #loader .lt{margin-top:20px;font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;font-weight:800;color:rgba(255,255,255,.8);opacity:0;transform:translateY(10px)}
-#loader.laid .lt{opacity:1;transform:none;transition:opacity .7s .7s,transform .7s .7s}
+#loader.laid .lt{opacity:1;transform:none;transition:opacity .6s .45s,transform .6s .45s}
 #loader.open .box{opacity:0;transform:scale(1.08);transition:opacity .6s .15s,transform 1s cubic-bezier(.2,.8,.2,1)}
 @media (prefers-reduced-motion:reduce){html.intro #loader{display:none}html.intro body{overflow:auto}}
 
