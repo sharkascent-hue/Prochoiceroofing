@@ -27,6 +27,9 @@
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const rand = (a, b) => a + Math.random() * (b - a);
 
+  /* phones get the portrait version of the hero video */
+  $$('video[data-poster-m]').forEach(v => { if (innerWidth <= 760) v.poster = v.dataset.posterM; });
+
   /* config fill */
   $$('[data-cfg]').forEach(el => {
     const k = el.dataset.cfg;
@@ -172,7 +175,7 @@
     const dpr = Math.min(devicePixelRatio || 1, 2);
     const size = () => { w = cv.clientWidth; h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.round(w * h / 10000 * (o.density || 1)); drops = Array.from({ length: n }, () => ({ x: rand(0, w), y: rand(0, h), l: rand(10, 24), v: rand(9, 16) * (o.speed || 1), a: rand(.08, .28) * (o.alpha || 1) })); };
-    size(); addEventListener('resize', size);
+    size(); let lw = innerWidth; addEventListener('resize', () => { if (innerWidth !== lw) { lw = innerWidth; size(); } }); // ignore the phone toolbar showing/hiding
     const tick = () => {
       ctx.clearRect(0, 0, w, h); ctx.lineWidth = 1;
       for (const d of drops) {

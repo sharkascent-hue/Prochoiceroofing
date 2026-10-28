@@ -205,7 +205,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{p}assets/style.css?v=2">
+<link rel="stylesheet" href="{p}assets/style.css?v=3">
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"sameAs":["https://prochoiceroofing.ie/"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
@@ -270,6 +270,8 @@ def form(p, kind='quote', title='Request a free quote', sub='Free, no-obligation
 def qdrop(p):
     """Quote panel that drops down from under the header (like vantageroofing.ie)."""
     f = form(p, 'full', 'Get a free quote', 'Free, no-obligation written quote. We aim to reply within 24 hours.').replace('<form class="formcard"', '<form class="formcard" id="quote"')
+    perks = '<ul class="qperks">' + ''.join(f'<li>{I["check"]}{t}</li>' for t in ['No call-out fee', 'Written quote first', 'Fully insured', '24/7 emergencies']) + '</ul>'
+    f = f.replace('<div class="fmsg"', perks + '<div class="fmsg"', 1)
     return f'''<div class="qdrop" id="qdrop" aria-hidden="true" data-lenis-prevent><div class="wrap qdgrid">
 <div class="qdside"><span class="eyebrow">Free quotes · no call-out fee</span><h3>Tell us about your roof.</h3>
 <p>Free roof inspection and a clear, written quote before any work starts. Serving Dublin, Meath &amp; Louth.</p>
@@ -303,7 +305,7 @@ def scripts(p):
     return f'''<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="{p}assets/site.js?v=2" defer></script>'''
+<script src="{p}assets/site.js?v=3" defer></script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -437,8 +439,8 @@ def talk(p):
 # ---------- pages ----------
 def home(p):
     trust = ''.join(f'<li>{I["check"]}{t}</li>' for t in ['Free Roof Inspections & Fixed Quotes', 'Fully Insured Roofing Specialists', 'Quality Workmanship, Fully Guaranteed'])
-    return f'''<section class="hero hvid" data-rain>
-<video class="bg" poster="{p}video/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video>
+    return f'''<section class="hero hvid">
+<video class="bg" poster="{p}video/hero-poster.jpg" data-poster-m="{p}video/hero-m-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="{p}video/hero-m.mp4" type="video/mp4" media="(max-width:760px)"><source src="{p}video/hero-m.webm" type="video/webm" media="(max-width:760px)"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video>
 <div class="wrap">
 <div>
 <div class="gbadge"><span class="stars">★★★★★</span><b>5/5</b> Rated excellent by Dublin homeowners</div>

@@ -592,3 +592,9 @@ html.qdrop-open .qdrop{clip-path:inset(0 0 0 0);opacity:1;visibility:visible;tra
 }
 @media (max-width:600px){.article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}.article td,.article th{min-width:110px}}
 @media (max-width:1020px){.weather .vwrap .pill{position:relative;left:auto;bottom:auto;margin:14px 0 0;display:inline-flex}.weather .vwrap{margin-bottom:0}}
+/* phones & tablets: the quote card lives in the drop-down only, not as an extra block under the hero */
+.qperks{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:8px}
+.qperks li{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:.8rem;font-weight:700}
+.qperks svg{width:15px;height:15px;color:var(--blue);flex:none}
+@media (max-width:1020px){.hero.hvid .hcard{display:none}}
+.hero.hvid video.bg{transform:translateZ(0);backface-visibility:hidden}
