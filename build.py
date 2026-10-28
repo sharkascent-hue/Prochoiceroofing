@@ -4,7 +4,7 @@ Edit the content below, then run:  python3 build.py   (writes the .html files ne
 import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = 'https://prochoiceroofing.ie'
+SITE = 'https://prochoiceroofer.ie'
 PHONE, TEL, EMAIL = '087 438 5708', 'tel:+353874385708', 'prochoiceroofers@gmail.com'
 
 # ---------- icons ----------
@@ -207,7 +207,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="{p}assets/style.css?v=5">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"sameAs":["https://prochoiceroofing.ie/"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
     def on(k): return ' class="on" aria-current="page"' if k == active else ''
