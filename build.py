@@ -205,7 +205,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{p}assets/style.css?v=3">
+<link rel="stylesheet" href="{p}assets/style.css?v=4">
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"sameAs":["https://prochoiceroofing.ie/"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
@@ -305,7 +305,7 @@ def scripts(p):
     return f'''<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="{p}assets/site.js?v=3" defer></script>'''
+<script src="{p}assets/site.js?v=4" defer></script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')

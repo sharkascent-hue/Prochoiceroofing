@@ -27,6 +27,7 @@
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const rand = (a, b) => a + Math.random() * (b - a);
 
+  if (html.classList.contains('intro')) $$('.hero video.bg').forEach(v => v.pause());
   /* phones get the portrait version of the hero video */
   $$('video[data-poster-m]').forEach(v => { if (innerWidth <= 760) v.poster = v.dataset.posterM; });
 
@@ -172,7 +173,7 @@
     const cv = document.createElement('canvas'); cv.className = 'rain'; cv.setAttribute('aria-hidden', 'true');
     host.insertBefore(cv, host.firstElementChild ? host.firstElementChild.nextSibling : null);
     const ctx = cv.getContext('2d'); let w, h, drops = [], vis = true, raf;
-    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const dpr = 1;
     const size = () => { w = cv.clientWidth; h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.round(w * h / 10000 * (o.density || 1)); drops = Array.from({ length: n }, () => ({ x: rand(0, w), y: rand(0, h), l: rand(10, 24), v: rand(9, 16) * (o.speed || 1), a: rand(.08, .28) * (o.alpha || 1) })); };
     size(); let lw = innerWidth; addEventListener('resize', () => { if (innerWidth !== lw) { lw = innerWidth; size(); } }); // ignore the phone toolbar showing/hiding
@@ -190,7 +191,7 @@
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }
-  $$('[data-rain]').forEach(el => rainOn(el));
+  if (!touch) $$('[data-rain]').forEach(el => rainOn(el));
 
   /* ---------- intro: slates are laid across the screen from the eaves up,
      the logo is revealed, then the tiles lift away from the centre to open the page ---------- */
@@ -200,7 +201,7 @@
     try { sessionStorage.setItem('pcr_intro', '1'); } catch (e) {}
     if (!loader || !html.classList.contains('intro') || reduce || !loader.animate) { finishIntro(); return; }
     const host = $('.slates', loader), W = innerWidth, H = innerHeight;
-    const tw = Math.max(64, Math.min(140, W / 8)), th = Math.round(tw * .62), gap = 3;
+    const tw = touch ? Math.max(76, W / 5) : Math.max(64, Math.min(140, W / 8)), th = Math.round(tw * .62), gap = 3;
     const cols = Math.ceil(W / tw) + 1, rows = Math.ceil(H / th) + 1;
     const cx = W / 2, cy = H / 2, maxD = Math.hypot(cx, cy), tiles = [];
     const frag = document.createDocumentFragment();
@@ -217,7 +218,7 @@
     // 1. laid row by row from the bottom (the eaves) up to the top (the ridge)
     const layMs = 1000, per = layMs / rows;
     tiles.forEach(o => o.t.animate(
-      [{ opacity: 0, transform: 'translateY(-46px) rotateX(70deg)' }, { opacity: 1, transform: 'none' }],
+      [{ opacity: 0, transform: touch ? 'translateY(-40px)' : 'translateY(-46px) rotateX(70deg)' }, { opacity: 1, transform: 'none' }],
       { duration: 420, delay: (rows - 1 - o.r) * per + (o.x / W) * 120, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }));
     // 2. light runs across the finished roof and the logo is revealed
     setTimeout(() => {
@@ -232,7 +233,7 @@
       tiles.forEach(o => {
         const dx = o.x - cx, dy = o.y - cy, d = Math.hypot(dx, dy) / maxD, k = 60 + Math.random() * 80;
         o.t.animate([{ opacity: 1, transform: 'none' },
-          { opacity: 0, transform: `translate(${dx / (d * maxD || 1) * k}px,${dy / (d * maxD || 1) * k - 30}px) rotateX(${55 + Math.random() * 30}deg) rotateZ(${(Math.random() - .5) * 30}deg) scale(.85)` }],
+          { opacity: 0, transform: `translate(${dx / (d * maxD || 1) * k}px,${dy / (d * maxD || 1) * k - 30}px) ${touch ? '' : `rotateX(${55 + Math.random() * 30}deg) `}rotateZ(${(Math.random() - .5) * 30}deg) scale(.85)` }],
           { duration: 650, delay: d * 520, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
       });
       setTimeout(finishIntro, 1250);
@@ -276,7 +277,7 @@
     const lead = $('.lead', hero); if (lead) tl.from(lead, { opacity: 0, y: 20, duration: 0.9, clearProps: 'all' }, 0.45);
     const btns = $$('.btn-row .btn', hero); if (btns.length) tl.from(btns, { opacity: 0, y: 16, duration: 0.7, stagger: 0.1, clearProps: 'all' }, 0.6);
     const trust = $('.trust', hero); if (trust) tl.from(trust, { opacity: 0, y: 14, duration: 0.8, clearProps: 'all' }, 0.85);
-    const vc = $('.vcard', hero); if (vc) tl.from(vc, { clipPath: 'inset(45% 0 45% 0 round 28px)', scale: 0.97, duration: 1.2, ease: 'power4.inOut', clearProps: 'all' }, 0.15);
+    const vc = $('.vcard', hero); if (vc) tl.from(vc, { opacity: 0, y: 30, scale: 0.96, duration: 1.1, ease: 'power3.out', clearProps: 'all' }, 0.15);
     const fr = $('.vwrap .frame', hero); if (fr) tl.from(fr, { opacity: 0, scale: 1.05, duration: 1, clearProps: 'all' }, 0.9);
     const pill = $('.vwrap .pill', hero); if (pill) tl.from(pill, { opacity: 0, y: 20, scale: 0.92, duration: 0.7, ease: 'back.out(1.6)', clearProps: 'all' }, 1.2);
     const tag = $('.vwrap .tag', hero); if (tag) tl.from(tag, { opacity: 0, x: -14, duration: 0.6, clearProps: 'all' }, 1.1);
@@ -309,8 +310,8 @@
     $$('[data-clip]').forEach(el => {
       const img = $('img', el);
       const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%' } });
-      tl.from(el, { clipPath: 'inset(0 0 100% 0 round 24px)', duration: 1.2, ease: 'power4.inOut', clearProps: 'clipPath' }, 0);
-      if (img) tl.from(img, { scale: 1.2, duration: 1.6, ease: 'power3.out', clearProps: 'transform' }, 0);
+      tl.from(el, { y: 50, opacity: 0, duration: 1.1, ease: 'power3.out', clearProps: 'transform,opacity' }, 0);
+      if (img) tl.from(img, { scale: 1.12, duration: 1.6, ease: 'power3.out', clearProps: 'transform' }, 0);
     });
     $$('.weather .big').forEach(el => gsap.to(el, { xPercent: -14, ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
     $$('[data-count]').forEach(el => { const n = +el.dataset.count; const o = { v: 0 }; gsap.to(o, { v: n, duration: 1.6, ease: 'power2.out', onUpdate: () => el.textContent = Math.round(o.v), scrollTrigger: { trigger: el, start: 'top 90%' } }); });
