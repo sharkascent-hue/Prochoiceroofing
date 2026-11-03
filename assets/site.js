@@ -216,7 +216,7 @@
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }
-  if (!touch) $$('[data-rain]').forEach(el => rainOn(el));
+  if (!touch && innerWidth > 1020) $$('[data-rain]').forEach(el => rainOn(el)); // desktop only: wasted work on small screens
 
   /* split headings into words */
   function splitWords(el) {
@@ -245,7 +245,10 @@
   function heroIn() {
     if (heroDone) return; heroDone = true;
     const hero = $('.hero, .phero'); if (!hero) return;
-    $$('video', hero).forEach(v => v.play().catch(() => {}));
+    // the hero video waits until the page has loaded, so it never competes with the first paint
+    const play = () => $$('video', hero).forEach(v => v.play().catch(() => {}));
+    if (document.readyState === 'complete') setTimeout(play, touch ? 800 : 0);
+    else addEventListener('load', () => setTimeout(play, touch ? 800 : 0), { once: true });
     if (!G || reduce) return;
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     const h = $('h1', hero);

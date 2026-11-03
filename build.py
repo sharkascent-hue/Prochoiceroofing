@@ -204,15 +204,15 @@ def head(p, title, desc, path, kw=''):
 <meta property="og:type" content="website"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">
 <meta property="og:image" content="{SITE}/img/after-2.jpg"><meta property="og:url" content="{canon}"><meta property="og:locale" content="en_IE">
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="{p}assets/style.css?v=7">
+<link rel="stylesheet" href="{p}assets/style.css?v=9">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
 gtag('set','ads_data_redaction',ok!=='granted');gtag('js',new Date());gtag('config','{GA_ID}');</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+<script>(function(){{var d=0;function go(){{if(d)return;d=1;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id={GA_ID}';document.head.appendChild(s)}}
+['scroll','pointerdown','keydown','touchstart'].forEach(function(e){{addEventListener(e,go,{{once:true,passive:true}})}});addEventListener('load',function(){{setTimeout(go,5500)}})}})()</script>
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
@@ -309,10 +309,9 @@ def footer(p):
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
 
 def scripts(p):
-    return f'''<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="{p}assets/site.js?v=7" defer></script>'''
+    # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
+    return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
+L.push('{p}assets/site.js?v=9');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -320,7 +319,7 @@ def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     if ld:
         head_html += f'\n<script type="application/ld+json">{ld}</script>'
     if intro:
-        head_html += '\n<script>try{if(!sessionStorage.getItem("pcr_intro")||/[?&]intro/.test(location.search))document.documentElement.classList.add("intro")}catch(e){document.documentElement.classList.add("intro")}</script>'
+        head_html += '\n<script>try{if(matchMedia("(min-width:1021px) and (pointer:fine)").matches&&(!sessionStorage.getItem("pcr_intro")||/[?&]intro/.test(location.search)))document.documentElement.classList.add("intro")}catch(e){}</script>'
     loader = ''
     if intro:
         # intro: slates are laid across the screen from the eaves up, the logo is revealed, then the tiles lift away
@@ -342,11 +341,40 @@ def page(path, active, title, desc, body, intro=False, kw='', ld=''):
 </body>
 </html>
 '''
+    html = responsive(html)
     out = os.path.join(ROOT, path, 'index.html') if path else os.path.join(ROOT, 'index.html')
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, 'w', encoding='utf-8') as f:
         f.write(html)
     print('wrote', os.path.relpath(out, ROOT))
+
+# ---------- responsive images ----------
+import re
+def variant(f, w):
+    """img/NAME.jpg -> img/NAME-{w}.webp (made once, reused on rebuilds)."""
+    base, _ = os.path.splitext(f)
+    out = f'{base}-{w}.webp'
+    src, dst = os.path.join(ROOT, 'img', f), os.path.join(ROOT, 'img', out)
+    if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src):
+        with Image.open(src) as im:
+            im = im.convert('RGBA' if im.mode in ('RGBA', 'LA', 'P') else 'RGB')
+            im.thumbnail((w, w * 3))
+            im.save(dst, 'WEBP', quality=80, method=6)
+    return out
+
+def responsive(html):
+    def fix(m):
+        tag, pre, f = m.group(0), m.group(1), m.group(2)
+        if 'srcset=' in tag or not os.path.exists(os.path.join(ROOT, 'img', f)):
+            return tag
+        w = dims(f)[0]
+        sizes = [x for x in (480, 800) if x < w] + [min(w, 1200)]
+        srcset = ', '.join(f'{pre}img/{variant(f, x)} {x}w' for x in sizes)
+        if 'class="bg"' in tag: sz = '100vw'
+        elif 'logo' in f: sz = '(max-width:760px) 160px, 440px'
+        else: sz = '(max-width:760px) 100vw, 50vw'
+        return tag.replace(f'src="{pre}img/{f}"', f'src="{pre}img/{f}" srcset="{srcset}" sizes="{sz}"', 1)
+    return re.sub(r'<img[^>]*?src="((?:\.\./)*)img/([\w-]+\.(?:jpg|png))"[^>]*>', fix, html)
 
 # ---------- sections ----------
 def phero(p, crumb, h1, lead, img, extra=''):
@@ -449,14 +477,14 @@ def talk(p):
 def home(p):
     trust = ''.join(f'<li>{I["check"]}{t}</li>' for t in ['Free Roof Inspections & Fixed Quotes', 'Fully Insured Roofing Specialists', 'Quality Workmanship, Fully Guaranteed'])
     return f'''<section class="hero hvid">
-<video class="bg" poster="{p}video/hero-poster.jpg" data-poster-m="{p}video/hero-m-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="{p}video/hero-m.mp4" type="video/mp4" media="(max-width:760px)"><source src="{p}video/hero-m.webm" type="video/webm" media="(max-width:760px)"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video>
+<video class="bg" muted loop playsinline preload="none" aria-hidden="true"><source src="{p}video/hero-m.mp4" type="video/mp4" media="(max-width:760px)"><source src="{p}video/hero-m.webm" type="video/webm" media="(max-width:760px)"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video><script>document.currentScript.previousElementSibling.poster="{p}video/hero"+(innerWidth<=760?"-m":"")+"-poster.jpg"</script>
 <div class="wrap">
 <div>
 <div class="gbadge"><span class="stars">★★★★★</span><b>5/5</b> Rated excellent by Dublin homeowners</div>
 <span class="eyebrow">Dublin · Meath · Louth</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
 <p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>
-<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{p}portfolio/">Our work</a></div>
+<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
 <ul class="trust">{trust}</ul>
 </div>
 <div class="hcard">
