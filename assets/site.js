@@ -92,6 +92,30 @@
   /* job clips play while on screen */
   $$('video[data-autoplay]').forEach(v => new IntersectionObserver(es => es[0].isIntersecting ? v.play().catch(() => {}) : v.pause(), { threshold: 0.25 }).observe(v));
 
+  /* Google Analytics / Ads: lead events, plus the cookie banner that controls consent */
+  const track = (name, params) => { if (typeof gtag === 'function') gtag('event', name, params || {}); };
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if (!a) return;
+    const h = a.getAttribute('href');
+    if (h.startsWith('tel:')) track('click_to_call', { link_text: a.textContent.trim().slice(0, 40) });
+    else if (h.includes('wa.me')) track('whatsapp_click');
+    else if (h.startsWith('mailto:')) track('email_click');
+  });
+  const cc = $('#cc');
+  if (cc) {
+    let saved = null; try { saved = localStorage.getItem('pcr_consent'); } catch (e) {}
+    const choose = yes => {
+      try { localStorage.setItem('pcr_consent', yes ? 'yes' : 'no'); } catch (e) {}
+      const v = yes ? 'granted' : 'denied';
+      if (typeof gtag === 'function') { gtag('consent', 'update', { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v }); gtag('set', 'ads_data_redaction', !yes); }
+      cc.classList.remove('on'); setTimeout(() => { cc.hidden = true; }, 300);
+    };
+    const show = () => { cc.hidden = false; requestAnimationFrame(() => cc.classList.add('on')); };
+    $$('[data-cc]', cc).forEach(b => b.addEventListener('click', () => choose(b.dataset.cc === 'yes')));
+    $$('[data-ccopen]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(); }));
+    if (saved !== 'yes' && saved !== 'no') { if (window.__intro_done || !$('#loader')) setTimeout(show, 800); else addEventListener('intro:done', () => setTimeout(show, 800), { once: true }); }
+  }
+
   /* forms */
   $$('form[data-form]').forEach(form => {
     const msg = $('.fmsg', form);
@@ -116,6 +140,7 @@
           const r = await fetch(CONFIG.formEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: CONFIG.formKey, subject, from_name: 'Pro Choice Roofing website', ...data }) });
           const j = await r.json().catch(() => ({}));
           if (!r.ok || j.success === false) throw new Error();
+          track('generate_lead', { form: form.closest('#qdrop') ? 'quote drop-down' : (form.querySelector('h3') || {}).textContent || 'form', service: data.service || '' });
           form.reset(); say('Thanks, we have your request. We aim to respond within 24 hours. If it’s urgent, call ' + CONFIG.phone + '.', true);
         } catch (err) { say('Sorry, that didn’t send. Please call ' + CONFIG.phone + ' or email ' + CONFIG.email + '.'); }
         btn.disabled = false; btn.innerHTML = label;

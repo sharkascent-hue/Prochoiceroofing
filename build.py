@@ -5,6 +5,7 @@ import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = 'https://prochoiceroofer.ie'
+GA_ID = 'G-6RHPPKLRVB'  # Google Analytics measurement ID
 PHONE, TEL, EMAIL = '087 438 5708', 'tel:+353874385708', 'prochoiceroofers@gmail.com'
 
 # ---------- icons ----------
@@ -206,7 +207,12 @@ def head(p, title, desc, path, kw=''):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="{p}assets/style.css?v=6">
+<link rel="stylesheet" href="{p}assets/style.css?v=7">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
+var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
+gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
+gtag('set','ads_data_redaction',ok!=='granted');gtag('js',new Date());gtag('config','{GA_ID}');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
 
 def header(p, active):
@@ -298,7 +304,7 @@ def footer(p):
 <li>{I['clock']}<span>Open 24/7 for emergencies</span></li></ul></div>
 </div>
 <div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved.</span>
-<nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
+<nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="#" data-ccopen>Cookie settings</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
 </div></footer>
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
 
@@ -306,7 +312,7 @@ def scripts(p):
     return f'''<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-<script src="{p}assets/site.js?v=6" defer></script>'''
+<script src="{p}assets/site.js?v=7" defer></script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -331,6 +337,7 @@ def page(path, active, title, desc, body, intro=False, kw='', ld=''):
 {body(p)}
 </main>
 {footer(p)}
+<div class="cc" id="cc" role="dialog" aria-label="Cookie choices" hidden><p><b>Cookies</b>We use cookies to see how people use this site and to measure our ads. You can change your mind any time. <a href="{p}cookie-policy/">Cookie policy</a></p><div class="ccb"><button class="btn btn-line" type="button" data-cc="no">Reject</button><button class="btn btn-blue" type="button" data-cc="yes">Accept</button></div></div>
 {scripts(p)}
 </body>
 </html>
@@ -651,9 +658,14 @@ def dublin_page(p):
 {faq()}
 {cta(p)}'''
 
-COOKIES = [('pcr_intro', 'Session storage', 'Remembers that the opening animation has already played, so it only shows once per visit.', 'End of session')]
+COOKIES = [('pcr_intro', 'Session storage', 'Remembers that the opening animation has already played, so it only shows once per visit.', 'End of session'),
+           ('pcr_consent', 'Local storage', 'Remembers whether you accepted or rejected cookies, so we don’t ask again.', 'Until you clear it')]
+STATS = [('_ga', 'Google Analytics', 'Tells visits apart so we can count visitors and see which pages they use.', '2 years'),
+         ('_ga_*', 'Google Analytics', 'Keeps track of your current visit (session).', '2 years'),
+         ('_gcl_au', 'Google Ads', 'Lets us see when a visit from one of our Google ads leads to an enquiry.', '90 days')]
 def cookie_page(p):
     rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td></tr>' for a, b, c, d in COOKIES)
+    srows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td></tr>' for a, b, c, d in STATS)
     return f'''{phero(p, [('Cookie Policy', 'cookie-policy/')], 'Cookie policy.', 'How this website uses cookies and similar technologies.', 'roof-3.jpg')}
 <section class="sec"><div class="wrap article">
 <p>This page explains how we use cookies and similar technologies on our website. Cookies are small text files that are stored on your device when you visit a website. They help a site work properly and can help its owner understand how visitors use it. We are committed to respecting your privacy and being transparent about the data we collect. For more information on how we handle your personal data, please see our <a class="blue" href="{p}privacy-policy/">Privacy Policy</a>.</p>
@@ -661,7 +673,8 @@ def cookie_page(p):
 <p>Essential storage enables basic functions and is necessary for the website to work properly. It does not identify you.</p>
 <table><thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Duration</th></tr></thead><tbody>{rows}</tbody></table>
 <h2>Statistics &amp; marketing</h2>
-<p>This website does not currently set any analytics, advertising or tracking cookies. If we add analytics in the future (for example Google Analytics), it will only load after you give consent, and this page will be updated to list each cookie, its purpose and how long it lasts.</p>
+<p>With your consent, we use Google Analytics to understand how visitors use the site, and Google Ads to measure whether our ads lead to enquiries. These cookies are only set after you click <b>Accept</b> on the cookie banner. If you reject them, Google receives only basic, cookieless signals with no identifiers. You can change your choice at any time with the <b>Cookie settings</b> link at the bottom of every page.</p>
+<table><thead><tr><th>Name</th><th>Provider</th><th>Description</th><th>Duration</th></tr></thead><tbody>{srows}</tbody></table>
 <h2>Third-party content</h2>
 <p>Our contact page shows an embedded Google Map. Google may set its own cookies when the map loads. See <a class="blue" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s privacy policy</a> for details. Fonts are served by Google Fonts.</p>
 <h2>Managing cookies</h2>
