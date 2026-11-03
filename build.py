@@ -6,6 +6,7 @@ import os
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = 'https://prochoiceroofer.ie'
 GA_ID = 'G-6RHPPKLRVB'  # Google Analytics measurement ID
+GREVIEWS = 'https://share.google/2w6pQN1ZPab6vp59k'  # Google Business profile (reviews)
 PHONE, TEL, EMAIL = '087 438 5708', 'tel:+353874385708', 'prochoiceroofers@gmail.com'
 
 # ---------- icons ----------
@@ -436,8 +437,9 @@ def reviews():
     return f'''<section class="sec deep" data-rain><div class="wrap" style="position:relative;z-index:2">
 <div class="sec-head"><div><span class="eyebrow">Customer reviews</span><h2 data-split>Trusted roofing. Recommended by homeowners.</h2></div>
 <div><p>See what our customers say about the quality, reliability and professional service delivered by our roofing team.</p>
-<div class="rhead"><span class="stars">★★★★★</span><b>5.0</b><span style="font-size:.85rem;color:rgba(255,255,255,.7)">Rated 5/5 · Excellent</span></div></div></div>
-<div class="rgrid" data-reveal="group">{r}</div></div></section>'''
+<a class="rhead" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>40</b><span style="font-size:.85rem;color:rgba(255,255,255,.7)">Google reviews · Read them all</span></a></div></div>
+<div class="rgrid" data-reveal="group">{r}</div>
+<div class="btn-row" style="margin-top:34px"><a class="btn btn-blue" href="{GREVIEWS}" target="_blank" rel="noopener">{I['star']} Read all 40 Google reviews {I['arrowup']}</a></div></div></section>'''
 
 def faq(dark=False):
     q = ''.join(f'<details class="qa"><summary>{a}<i>{I["chev"]}</i></summary><p>{b}</p></details>' for a, b in FAQ)
@@ -480,7 +482,7 @@ def home(p):
 <video class="bg" muted loop playsinline preload="none" aria-hidden="true"><source src="{p}video/hero-m.mp4" type="video/mp4" media="(max-width:760px)"><source src="{p}video/hero-m.webm" type="video/webm" media="(max-width:760px)"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video><script>document.currentScript.previousElementSibling.poster="{p}video/hero"+(innerWidth<=760?"-m":"")+"-poster.jpg"</script>
 <div class="wrap">
 <div>
-<div class="gbadge"><span class="stars">★★★★★</span><b>5/5</b> Rated excellent by Dublin homeowners</div>
+<a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>40</b> Google reviews from Dublin homeowners</a>
 <span class="eyebrow">Dublin · Meath · Louth</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
 <p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>
