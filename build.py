@@ -144,10 +144,14 @@ BA = {
     4: ('before-4.jpg', 'after-4.jpg', 'Roofing Project 04', 'Chimney pot & capping'),
 }
 REVIEWS = [
+    ('Michael Mc Donagh', 'Roofing', 'I had Jordan and his team, highly recommended. They did an awesome job, couldn’t be any happier. Thanks again Jordan.'),
+    ('Jennie Anne Colette Moynihan', 'Roof repair', 'I was very happy with the work Jordan and his team did on my roof. They arrived quickly, took a number of photos to show me the problem with the roof, and then promptly resolved them. They were very careful when moving through the house.'),
+    ('Audrey Smith', 'Guttering, fascias & soffits', 'Had the lads putting up some new guttering, fascias and soffit, and some other bits in the house that needed doing. Couldn’t recommend them highly enough.'),
+    ('Anthony Eagers', 'Roofing', 'Very professional, highly recommend. Great work done and great prices.'),
     ('Nathan Power', 'Extension roof repair', 'I have no hesitation in recommending this company. They did a great job repairing the roof of my extension. The rain has been torrential over the past few days and nights, and the roof has stood the test. Great work. Great company.'),
     ('Elaine Cumiskey', 'Roof cleaning and tiles', 'Had James out to clean my roof, replace a few tiles and wash out my gutters. All I can say is it was an amazing job, and I would highly recommend this company. Thanks for your service, James.'),
     ('Stephanie Derbyshire', 'Roof and gutter repairs', 'Very helpful and professional service. James and the team cleaned and repaired our roof and gutters quickly and had everything clean and tidy when they left.'),
-    ('Scott Mulready', 'Residential roofing', 'Had Jordan and his team at my house and they did a brilliant job on my roof. They arrived on time, were polite and I wouldn’t go anywhere else. Fully recommend them to anyone needing roofing work done.'),
+    ('Scott Mulready', 'Residential roofing', 'Had Jordan and his team at my house. They did a brilliant job on my roof, arrived on time, polite men. Wouldn’t go anywhere else. Fully recommend for anyone needing anything done.'),
 ]
 AREAS = [('North Dublin', ['Swords', 'Malahide', 'Portmarnock', 'Skerries', 'Rush', 'Balbriggan']),
          ('Dublin City & West', ['Dublin City', 'Clontarf', 'Raheny', 'Artane', 'Blanchardstown', 'Castleknock']),
@@ -207,14 +211,14 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=9">
+<link rel="stylesheet" href="{p}assets/style.css?v=10">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
 gtag('set','ads_data_redaction',ok!=='granted');gtag('js',new Date());gtag('config','{GA_ID}');</script>
 <script>(function(){{var d=0;function go(){{if(d)return;d=1;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id={GA_ID}';document.head.appendChild(s)}}
 ['scroll','pointerdown','keydown','touchstart'].forEach(function(e){{addEventListener(e,go,{{once:true,passive:true}})}});addEventListener('load',function(){{setTimeout(go,5500)}})}})()</script>
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"5","reviewCount":"4"}}}}</script>'''
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"40","bestRating":"5"}}}}</script>'''
 
 def header(p, active):
     def on(k): return ' class="on" aria-current="page"' if k == active else ''
@@ -250,21 +254,22 @@ def header(p, active):
 </nav>'''
 
 def select(name='service'):
-    return f'<select name="{name}" required><option value="">Choose a service</option>' + ''.join(f'<option>{o}</option>' for o in SERVICE_OPTS) + '</select>'
+    return f'<select name="{name}"><option value="">Choose a service</option>' + ''.join(f'<option>{o}</option>' for o in SERVICE_OPTS) + '</select>'
 
 def form(p, kind='quote', title='Request a free quote', sub='Free, no-obligation written quotation. We aim to respond to every enquiry within 24 hours.'):
     if kind == 'callback':
-        fields = f'''<label class="f"><span>Name</span><input name="name" autocomplete="name" required></label>
-<label class="f"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" required></label>
-<label class="f full"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>'''
+        fields = f'''<label class="f"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" required></label>
+<label class="f"><span>Eircode *</span><input name="eircode" autocomplete="postal-code" required maxlength="8" pattern="[A-Za-z][0-9][0-9Ww] ?[0-9A-Za-z]{{4}}" placeholder="e.g. D15 RY6R" style="text-transform:uppercase" title="Your Eircode, e.g. D15 RY6R"></label>
+<label class="f full"><span>Name (optional)</span><input name="name" autocomplete="name"></label>'''
         btn = 'Request a callback'
     else:
-        email = '<label class="f"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>' if kind == 'full' else ''
+        email = '<label class="f"><span>Email (optional)</span><input name="email" type="email" autocomplete="email"></label>' if kind == 'full' else ''
         svc_cls = 'f' if kind == 'full' else 'f full'
-        fields = f'''<label class="f"><span>Name</span><input name="name" autocomplete="name" required></label>
-<label class="f"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" required></label>
-{email}<label class="{svc_cls}"><span>Service</span>{select()}</label>
-<label class="f full"><span>Message</span><textarea name="message" placeholder="Tell us about the problem or project" required></textarea></label>'''
+        fields = f'''<label class="f"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" required></label>
+<label class="f"><span>Eircode *</span><input name="eircode" autocomplete="postal-code" required maxlength="8" pattern="[A-Za-z][0-9][0-9Ww] ?[0-9A-Za-z]{{4}}" placeholder="e.g. D15 RY6R" style="text-transform:uppercase" title="Your Eircode, e.g. D15 RY6R"></label>
+<label class="f{'' if kind == 'full' else ' full'}"><span>Name (optional)</span><input name="name" autocomplete="name"></label>
+{email}<label class="f full"><span>Service (optional)</span>{select()}</label>
+<label class="f full"><span>Message (optional)</span><textarea name="message" placeholder="Tell us about the problem or project"></textarea></label>'''
         btn = 'Get a quote'
     return f'''<form class="formcard" data-form novalidate>
 <h3>{title}</h3><p class="sub">{sub}</p>
@@ -312,7 +317,7 @@ def footer(p):
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=9');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=10');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -437,7 +442,7 @@ def reviews():
     return f'''<section class="sec deep" data-rain><div class="wrap" style="position:relative;z-index:2">
 <div class="sec-head"><div><span class="eyebrow">Customer reviews</span><h2 data-split>Trusted roofing. Recommended by homeowners.</h2></div>
 <div><p>See what our customers say about the quality, reliability and professional service delivered by our roofing team.</p>
-<a class="rhead" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>40</b><span style="font-size:.85rem;color:rgba(255,255,255,.7)">Google reviews · Read them all</span></a></div></div>
+<a class="rhead" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>4.9</b><span style="font-size:.85rem;color:rgba(255,255,255,.7)">from 40 Google reviews · Read them all</span></a></div></div>
 <div class="rgrid" data-reveal="group">{r}</div>
 <div class="btn-row" style="margin-top:34px"><a class="btn btn-blue" href="{GREVIEWS}" target="_blank" rel="noopener">{I['star']} Read all 40 Google reviews {I['arrowup']}</a></div></div></section>'''
 
@@ -482,7 +487,7 @@ def home(p):
 <video class="bg" muted loop playsinline preload="none" aria-hidden="true"><source src="{p}video/hero-m.mp4" type="video/mp4" media="(max-width:760px)"><source src="{p}video/hero-m.webm" type="video/webm" media="(max-width:760px)"><source src="{p}video/hero.webm" type="video/webm"><source src="{p}video/hero.mp4" type="video/mp4"></video><script>document.currentScript.previousElementSibling.poster="{p}video/hero"+(innerWidth<=760?"-m":"")+"-poster.jpg"</script>
 <div class="wrap">
 <div>
-<a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>40</b> Google reviews from Dublin homeowners</a>
+<a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>4.9</b> from 40 Google reviews</a>
 <span class="eyebrow">Dublin · Meath · Louth</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
 <p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>

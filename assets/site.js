@@ -131,7 +131,8 @@
       if (bad) { say('Please fill in the highlighted fields.'); bad.focus(); return; }
       if ($('.hp', form) && $('.hp', form).value) return;
       const data = Object.fromEntries(new FormData(form).entries()); delete data.botcheck;
-      const subject = 'Website enquiry: ' + (data.service || 'Roofing quote') + ' – ' + (data.name || '');
+      if (data.eircode) data.eircode = data.eircode.toUpperCase();
+      const subject = 'Website enquiry: ' + [data.service || 'Roofing quote', data.eircode, data.name || data.phone].filter(Boolean).join(' – ');
       const body = Object.entries(data).filter(([, v]) => v).map(([k, v]) => k.charAt(0).toUpperCase() + k.slice(1) + ': ' + v).join('\n');
       const btn = $('button[type=submit]', form); const label = btn.innerHTML;
       if (CONFIG.formEndpoint && CONFIG.formKey) {
