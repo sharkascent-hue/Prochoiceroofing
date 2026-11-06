@@ -634,3 +634,7 @@ a.rhead,a.gbadge{transition:background .25s,border-color .25s}a.rhead:hover,a.gb
 .areas{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1020px){.areas{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:820px){.areas{grid-template-columns:1fr}}
+
+/* five area groups fit one row on desktop */
+.areas{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+@media (max-width:820px){.areas{grid-template-columns:1fr}}

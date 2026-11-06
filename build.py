@@ -156,7 +156,8 @@ REVIEWS = [
 AREAS = [('North Dublin', ['Swords', 'Malahide', 'Portmarnock', 'Skerries', 'Rush', 'Balbriggan']),
          ('Dublin City & West', ['Dublin City', 'Clontarf', 'Raheny', 'Artane', 'Blanchardstown', 'Castleknock']),
          ('Kildare', ['Maynooth', 'Leixlip', 'Celbridge', 'Kilcock', 'Clane', 'Naas', 'Newbridge', 'Kildare Town', 'Sallins', 'Straffan']),
-         ('Meath & Louth', ['Ashbourne', 'Ratoath', 'Dunboyne', 'Navan', 'Drogheda', 'Laytown'])]
+         ('Meath & Louth', ['Navan', 'Ashbourne', 'Ratoath', 'Dunboyne', 'Dunshaughlin', 'Trim', 'Drogheda', 'Laytown']),
+         ('Wicklow', ['Bray', 'Greystones', 'Enniskerry', 'Delgany', 'Kilcoole', 'Wicklow Town', 'Arklow', 'Blessington'])]
 STEPS = [('Inspect & Diagnose', 'We inspect your roof, identify the source of the problem and document any damage that needs attention.'),
          ('Explain & Quote', 'We explain our findings, recommend the right solution and provide a clear written quotation before work begins.'),
          ('Repair & Protect', 'Our team completes the roofing work professionally, checks the finished result and leaves your property clean and tidy.')]
@@ -165,16 +166,18 @@ SERVICE_OPTS = ['New Roof Installation', 'Roof Repairs', 'Flat Roofing', 'Chimne
 FAQ = [
     ('How much does a roof repair cost in Dublin?', 'Most small roof repairs in Dublin, such as replacing slipped tiles or re-sealing flashing, cost a few hundred euro. Larger repairs and replacements depend on the size and condition of the roof. We inspect for free and give you a clear written quote before any work starts.'),
     ('Do you charge for a roof inspection or quote?', 'No. Roof inspections and written quotations are free, with no call-out fee and no obligation.'),
-    ('Do you do emergency roof repairs?', 'Yes. We are available 24/7 for leaks, storm damage and missing tiles across Dublin, Kildare, Meath and Louth. We secure the roof first to stop further water damage, then complete the permanent repair.'),
-    ('Which areas do you cover?', 'All of Dublin, including Dublin 15, Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Raheny and Lucan; Kildare, including Maynooth, Leixlip, Celbridge, Kilcock, Clane, Naas and Newbridge; plus Kildare, Meath and Louth: Ashbourne, Ratoath, Dunboyne, Navan and Drogheda.'),
+    ('Do you do emergency roof repairs?', 'Yes. We are available 24/7 for leaks, storm damage and missing tiles across Dublin, Meath, Kildare, Wicklow and Louth. We secure the roof first to stop further water damage, then complete the permanent repair.'),
+    ('Which areas do you cover?', 'All of Dublin, including Dublin 15, Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Raheny and Lucan; Meath, including Navan, Ashbourne, Ratoath, Dunboyne and Trim; Kildare, including Maynooth, Leixlip, Celbridge, Naas and Newbridge; Wicklow, including Bray, Greystones, Wicklow Town and Arklow; and Drogheda in Louth.'),
     ('Are you insured?', 'Yes. Pro Choice Roofing is fully insured, and all workmanship is guaranteed.'),
     ('How long does a new roof take?', 'A typical house re-roof in Dublin takes between three days and a week, depending on size, weather and the roofing system. We give you a timeline with your quote.'),
 ]
+WICKLOW = ['Bray', 'Greystones', 'Enniskerry', 'Delgany', 'Kilcoole', 'Newtownmountkennedy', 'Wicklow Town', 'Arklow', 'Blessington']
+MEATH = ['Navan', 'Ashbourne', 'Ratoath', 'Dunboyne', 'Dunshaughlin', 'Clonee', 'Trim', 'Kells', 'Enfield', 'Laytown', 'Bettystown']
 KILDARE = ['Maynooth', 'Leixlip', 'Celbridge', 'Kilcock', 'Clane', 'Naas', 'Newbridge', 'Kildare Town', 'Sallins', 'Straffan']
 AREA_TOWNS = [t for _, ts in AREAS for t in ts] + ['Dublin 15', 'Lucan', 'Finglas', 'Santry', 'Howth', 'Donabate', 'Clonsilla', 'Ongar']
-KW = 'roofers Dublin, roofer Dublin, roof repairs Dublin, roofing contractors Dublin, new roof Dublin, flat roofing Dublin, chimney repairs Dublin, emergency roof repairs Dublin, guttering Dublin, roofers Dublin 15, roofers Meath, roofers Louth, roofers Kildare, roof repairs Kildare, roofers Maynooth, roofers Leixlip, roofers Celbridge, roofers Naas, roofers Newbridge'
+KW = 'roofers Dublin, roofer Dublin, roof repairs Dublin, roofing contractors Dublin, new roof Dublin, flat roofing Dublin, chimney repairs Dublin, emergency roof repairs Dublin, guttering Dublin, roofers Dublin 15, roofers Meath, roofers Louth, roofers Kildare, roof repairs Kildare, roofers Maynooth, roofers Leixlip, roofers Celbridge, roofers Naas, roofers Newbridge, roofers Meath, roof repairs Meath, roofing contractors Meath, roofers Navan, roofers Ashbourne, roofers Ratoath, roofers Dunboyne, roofers Wicklow, roof repairs Wicklow, roofing contractors Wicklow, roofers Bray, roofers Greystones, roofers Arklow, roofing contractors Kildare, flat roofing Kildare, flat roofing Meath, flat roofing Wicklow, chimney repairs Meath, chimney repairs Wicklow'
 
-AREA_LD = ','.join(f'{{"@type":"Place","name":"{t}"}}' for t in ['Dublin', 'County Kildare', 'County Meath', 'County Louth'] + AREA_TOWNS)
+AREA_LD = ','.join(f'{{"@type":"Place","name":"{t}"}}' for t in ['Dublin', 'County Wicklow', 'County Kildare', 'County Meath', 'County Louth'] + sorted(set(AREA_TOWNS + MEATH + WICKLOW)))
 
 # ---------- building blocks ----------
 from PIL import Image
@@ -213,7 +216,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=11">
+<link rel="stylesheet" href="{p}assets/style.css?v=12">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
@@ -289,7 +292,7 @@ def qdrop(p):
     f = f.replace('<div class="fmsg"', perks + '<div class="fmsg"', 1)
     return f'''<div class="qdrop" id="qdrop" aria-hidden="true" data-lenis-prevent><div class="wrap qdgrid">
 <div class="qdside"><span class="eyebrow">Free quotes · no call-out fee</span><h3>Tell us about your roof.</h3>
-<p>Free roof inspection and a clear, written quote before any work starts. Serving Dublin, Kildare, Meath &amp; Louth.</p>
+<p>Free roof inspection and a clear, written quote before any work starts. Serving Dublin, Meath, Kildare &amp; Wicklow.</p>
 <a class="qdl" href="{TEL}">{I['phone']}<span><b>Call {PHONE}</b><small>Available 24/7 for emergencies</small></span></a>
 <a class="qdl wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span><b>WhatsApp a photo</b><small>Quickest way to a price</small></span></a>
 <a class="qdl" href="mailto:{EMAIL}">{I['mail']}<span><b>Email us</b><small>{EMAIL}</small></span></a>
@@ -303,7 +306,7 @@ def footer(p):
 <div><img class="fl" src="{p}img/logo-white.png" alt="Pro Choice Roofing" width="763" height="393" loading="lazy">
 <p>Pro Choice Roofing provides reliable roofing services throughout Dublin and the surrounding areas. Contact our team today for a free quote.</p>
 <span class="h247">{I['clock'].replace('<svg', '<svg width="14" height="14"')} AVAILABLE 24/7</span></div>
-<div><h4>Useful Links</h4><ul><li><a href="{p}">Home</a></li><li><a href="{p}about/">About Us</a></li><li><a href="{p}services/">Services</a></li><li><a href="{p}portfolio/">Our Portfolio</a></li><li><a href="{p}roofers-dublin/">Roofers in Dublin</a></li><li><a href="{p}roofers-kildare/">Roofers in Kildare</a></li><li><a href="{p}contact/">Contact Us</a></li></ul></div>
+<div><h4>Useful Links</h4><ul><li><a href="{p}">Home</a></li><li><a href="{p}about/">About Us</a></li><li><a href="{p}services/">Services</a></li><li><a href="{p}portfolio/">Our Portfolio</a></li><li><a href="{p}roofers-dublin/">Roofers in Dublin</a></li><li><a href="{p}roofers-meath/">Roofers in Meath</a></li><li><a href="{p}roofers-kildare/">Roofers in Kildare</a></li><li><a href="{p}roofers-wicklow/">Roofers in Wicklow</a></li><li><a href="{p}contact/">Contact Us</a></li></ul></div>
 <div><h4>Services</h4><ul>{svc}</ul></div>
 <div><h4>Contact Info</h4><ul class="ci">
 <li>{I['pin']}<span>20 Mount Eustace Crescent<br>Dublin 15, D15 RY6R, Ireland</span></li>
@@ -319,7 +322,7 @@ def footer(p):
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=11');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=12');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -397,7 +400,7 @@ def phero(p, crumb, h1, lead, img, extra=''):
 </div></section>'''
 
 def marquee():
-    items = ['New roof installations', 'Roof repairs', 'Flat roofing', 'Chimney repairs', 'Emergency call-outs 24/7', 'Guttering, fascia & soffits', 'Dublin, Kildare, Meath & Louth', 'Free written quotes']
+    items = ['New roof installations', 'Roof repairs', 'Flat roofing', 'Chimney repairs', 'Emergency call-outs 24/7', 'Guttering, fascia & soffits', 'Dublin, Meath, Kildare & Wicklow', 'Free written quotes']
     s = ''.join(f'<span>{t}</span>' for t in items)
     return f'<div class="marquee" aria-hidden="true"><div class="track">{s}{s}</div></div>'
 
@@ -459,11 +462,11 @@ def areas(p, more=True):
     a = ''.join(f'<div class="area"><h3>{I["pin"]}{t}</h3><div class="chips">{"".join(f"<span>{x}</span>" for x in xs)}</div></div>' for t, xs in AREAS)
     return f'''<section class="sec"><div class="wrap">
 <span class="eyebrow">Areas we serve</span><h2 data-split style="max-width:20ch">Professional roofing across Dublin and surrounding areas.</h2>
-<p>Pro Choice Roofing provides new roof installations, roof repairs, flat roofing and guttering services throughout Dublin, Kildare, Meath and Louth.</p>
+<p>Pro Choice Roofing provides new roof installations, roof repairs, flat roofing and guttering services throughout Dublin, Meath, Kildare, Wicklow and Louth.</p>
 <div class="areas" data-reveal="group">{a}</div>
 <div class="callcard" data-reveal><div><h3>Not sure if we cover your area?</h3><p>Call our roofing team and we will be happy to help.</p></div>
 <a class="btn btn-white" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
-{f'<p style="margin-top:22px;display:flex;gap:22px;flex-wrap:wrap"><a class="tlink" href="{p}roofers-dublin/">Roofers in Dublin {I["arrow"]}</a><a class="tlink" href="{p}roofers-kildare/">Roofers in Kildare {I["arrow"]}</a></p>' if more else ''}
+{f'<p style="margin-top:22px;display:flex;gap:22px;flex-wrap:wrap"><a class="tlink" href="{p}roofers-dublin/">Roofers in Dublin {I["arrow"]}</a><a class="tlink" href="{p}roofers-meath/">Roofers in Meath {I["arrow"]}</a><a class="tlink" href="{p}roofers-kildare/">Roofers in Kildare {I["arrow"]}</a><a class="tlink" href="{p}roofers-wicklow/">Roofers in Wicklow {I["arrow"]}</a></p>' if more else ''}
 </div></section>'''
 
 def cta(p):
@@ -490,7 +493,7 @@ def home(p):
 <div class="wrap">
 <div>
 <a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>4.9</b> from 40 Google reviews</a>
-<span class="eyebrow">Dublin · Kildare · Meath · Louth</span>
+<span class="eyebrow">Dublin · Meath · Kildare · Wicklow</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
 <p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>
 <div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
@@ -576,7 +579,7 @@ def services_page(p):
 <div><div class="bign">0{i}</div><h2 style="font-size:clamp(1.6rem,2.6vw,2.2rem)">{s['name']}</h2><p>{s['summary']}</p>
 <ul class="ticks">{''.join(f"<li>{I['check']}{f[1]}</li>" for f in s['feats'])}</ul>
 <a class="btn btn-blue" href="{p}{s['slug']}/">View service {I['arrow']}</a></div></div>'''
-    return f'''{phero(p, [('Services', 'services/')], 'Roofing services in Dublin.', 'New roof installations, roof repairs, flat roofing, guttering, fascia and soffits, chimney repairs and 24/7 emergency roof repairs, across Dublin, Kildare, Meath and Louth.', 'roof-3.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Request a quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+    return f'''{phero(p, [('Services', 'services/')], 'Roofing services in Dublin.', 'New roof installations, roof repairs, flat roofing, guttering, fascia and soffits, chimney repairs and 24/7 emergency roof repairs, across Dublin, Meath, Kildare, Wicklow and Louth.', 'roof-3.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Request a quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
 {services_grid(p, title='What we offer.', imgs='card')}
 <section class="sec deep"><div class="wrap">
 <div class="center" style="margin-bottom:60px"><span class="eyebrow">In detail</span><h2 data-split>Expert roofing. Reliable protection.</h2></div>
@@ -671,14 +674,14 @@ def contact_page(p):
 </ul>
 </div></section>
 <section class="sec"><div class="wrap">
-<div class="sec-head"><div><span class="eyebrow">Find us</span><h2 data-split>Based in Dublin 15.</h2></div><p>We cover all of Dublin, Kildare, Meath and Louth. Not sure if we cover you? Call <a class="blue" href="{TEL}"><b>{PHONE}</b></a>.</p></div>
+<div class="sec-head"><div><span class="eyebrow">Find us</span><h2 data-split>Based in Dublin 15.</h2></div><p>We cover all of Dublin, Meath, Kildare, Wicklow and Louth. Not sure if we cover you? Call <a class="blue" href="{TEL}"><b>{PHONE}</b></a>.</p></div>
 <div class="map"><iframe title="Pro Choice Roofing location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=20%20Mount%20Eustace%20Crescent%2C%20Dublin%2015%2C%20D15%20RY6R&amp;z=14&amp;output=embed"></iframe></div>
 </div></section>
 {cta(p)}'''
 
 def dublin_page(p):
     towns = ''.join(f'<span>{t}</span>' for t in sorted(set(AREA_TOWNS)))
-    return f'''{phero(p, [('Roofers in Dublin', 'roofers-dublin/')], 'Roofers in Dublin you can rely on.', 'Pro Choice Roofing is a Dublin 15 roofing company covering every part of Dublin, plus Kildare, Meath and Louth. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.', 'roof-6.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+    return f'''{phero(p, [('Roofers in Dublin', 'roofers-dublin/')], 'Roofers in Dublin you can rely on.', 'Pro Choice Roofing is a Dublin 15 roofing company covering every part of Dublin, plus Meath, Kildare, Wicklow and Louth. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.', 'roof-6.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
 {marquee()}
 <section class="sec"><div class="wrap split">
 <div><span class="eyebrow">Local Dublin roofers</span><h2 data-split>A roofing company based in Dublin 15.</h2>
@@ -687,7 +690,7 @@ def dublin_page(p):
 <p>Whether it is a quick repair, a full re-roof or an emergency after a storm, you deal directly with an experienced, fully insured roofer.</p>
 <div class="chips big">{towns}</div>
 <div class="callrow"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div></div>
-{pic(p, 'roof-4.jpg', 'Pro Choice roofers re-tiling a house in Dublin', I['pin'] + 'Dublin, Kildare, Meath &amp; Louth')}
+{pic(p, 'roof-4.jpg', 'Pro Choice roofers re-tiling a house in Dublin', I['pin'] + 'Dublin, Meath, Kildare &amp; Wicklow')}
 </div></section>
 {services_grid(p, title='Roofing services across Dublin.', imgs='card')}
 {areas(p, more=False)}
@@ -713,6 +716,40 @@ def kildare_page(p):
 {reviews()}
 {faq()}
 {cta(p)}"""
+
+def county_page(name, slug, towns, lead, h2, paras, img, alt):
+    def body(p):
+        chips = ''.join(f'<span>{t}</span>' for t in towns)
+        ps = ''.join(f'<p>{x}</p>' for x in paras)
+        return f"""{phero(p, [(f'Roofers in {name}', slug)], f'Roofers in {name} you can rely on.', lead, img, f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+{marquee()}
+<section class="sec"><div class="wrap split">
+<div><span class="eyebrow">Local {name} roofers</span><h2 data-split>{h2}</h2>{ps}
+<div class="chips big">{chips}</div>
+<div class="callrow"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><div><small>Prefer to call?</small><a class="num" href="{TEL}">{PHONE}</a></div></div></div>
+{pic(p, 'roof-6.jpg' if img != 'roof-6.jpg' else 'roof-5.jpg', alt, I['pin'] + name + ' &amp; Dublin')}
+</div></section>
+{services_grid(p, title=f'Roofing services across {name}.', imgs='card')}
+{areas(p, more=False)}
+{reviews()}
+{faq()}
+{cta(p)}"""
+    return body
+
+meath_page = county_page('Meath', 'roofers-meath/', MEATH,
+    'Pro Choice Roofing covers all of Meath from our base in Dublin 15, minutes from Dunboyne, Clonee and Ratoath. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.',
+    'Minutes from Dunboyne, Ratoath and Ashbourne.',
+    ['Our base in Dublin 15 is right beside the Meath border, so we can be with you quickly anywhere in the county, from Dunboyne, Clonee, Ratoath and Ashbourne to Navan, Trim, Kells, Enfield and the coast at Laytown and Bettystown.',
+     'We repair leaking roofs, slipped and broken tiles, chimneys, flat roofs on extensions and worn guttering, fascias and soffits, and we fit complete new roofs on homes and commercial buildings across Meath.',
+     'Every job starts with a free inspection and a clear written quote before any work begins, and you deal directly with an experienced, fully insured roofer.'],
+    'roof-4.jpg', 'Pro Choice roofers re-tiling a house in Meath')
+wicklow_page = county_page('Wicklow', 'roofers-wicklow/', WICKLOW,
+    'Pro Choice Roofing covers Wicklow from Bray and Greystones down to Wicklow Town and Arklow, and west to Blessington. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.',
+    'From Bray and Greystones to Arklow.',
+    ['We cover the whole of Wicklow, from Bray, Greystones, Enniskerry, Delgany and Kilcoole down the coast to Wicklow Town and Arklow, and inland to Newtownmountkennedy and Blessington.',
+     'Coastal and hillside Wicklow roofs take the worst of the wind and rain. We repair storm damage, slipped and missing tiles, leaking chimneys and Velux windows, worn flat roofs and gutters, and we fit complete new roofs.',
+     'Every job starts with a free inspection and a clear written quote before any work begins, and you deal directly with an experienced, fully insured roofer.'],
+    'roof-3.jpg', 'Pro Choice roofers fitting a new roof in Wicklow')
 
 COOKIES = [('pcr_intro', 'Session storage', 'Remembers that the opening animation has already played, so it only shows once per visit.', 'End of session'),
            ('pcr_consent', 'Local storage', 'Remembers whether you accepted or rejected cookies, so we don’t ask again.', 'Until you clear it')]
@@ -767,17 +804,21 @@ if __name__ == '__main__':
     import json
     pages = []
     def P(path, *a, **k): pages.append(path); page(path, *a, **k)
-    P('', 'home', 'Roofers Dublin | Roof Repairs & New Roofs | Pro Choice Roofing',
-      'Pro Choice Roofing: trusted roofers in Dublin 15 covering all of Dublin, Kildare, Meath and Louth. Roof repairs, new roofs, flat roofing, chimneys, guttering and 24/7 emergency repairs. Free quotes.', home, intro=True, ld=faq_ld())
+    P('', 'home', 'Roofers Dublin, Meath, Kildare & Wicklow | Roof Repairs & New Roofs | Pro Choice Roofing',
+      'Pro Choice Roofing: trusted roofers in Dublin 15 covering Dublin, Meath, Kildare and Wicklow. Roof repairs, new roofs, flat roofing, chimneys, guttering and 24/7 emergency repairs. Free quotes.', home, intro=True, ld=faq_ld())
     P('services/', 'services', 'Roofing Services Dublin' + T, 'New roof installations, roof repairs, flat roofing, guttering, fascia & soffits, chimney repairs and emergency roof repairs across Dublin.', services_page)
     for s in SERVICES:
-        P(s['slug'] + '/', 'services', s['h1'].rstrip('.') + ', Kildare & Meath' + T, s['summary'], service_page(s),
-          kw=f"{s['name'].lower()} Dublin, {s['short'].lower()} Dublin, roofers Dublin, roofing contractors Dublin, {s['name'].lower()} Kildare, {s['name'].lower()} Meath, {s['name'].lower()} Louth")
-    P('roofers-dublin/', 'areas', 'Roofers in Dublin | Local Dublin 15 Roofing Company' + T, 'Local roofers in Dublin 15 covering Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Lucan and all of Dublin, plus Kildare, Meath and Louth. Free quotes, 24/7 emergency repairs.', dublin_page, ld=faq_ld())
+        P(s['slug'] + '/', 'services', s['h1'].rstrip('.') + ', Meath, Kildare & Wicklow' + T, s['summary'], service_page(s),
+          kw=f"{s['name'].lower()} Dublin, {s['short'].lower()} Dublin, roofers Dublin, roofing contractors Dublin, {s['name'].lower()} Kildare, {s['name'].lower()} Wicklow, {s['name'].lower()} Meath, {s['name'].lower()} Louth")
+    P('roofers-dublin/', 'areas', 'Roofers in Dublin | Local Dublin 15 Roofing Company' + T, 'Local roofers in Dublin 15 covering Blanchardstown, Castleknock, Swords, Malahide, Clontarf, Lucan and all of Dublin, plus Meath, Kildare, Wicklow and Louth. Free quotes, 24/7 emergency repairs.', dublin_page, ld=faq_ld())
     P('roofers-kildare/', 'areas', 'Roofers in Kildare | Maynooth, Leixlip, Celbridge & Naas' + T, 'Roofers covering Maynooth, Leixlip, Celbridge, Kilcock, Clane, Naas, Newbridge and all of north Kildare. Roof repairs, new roofs, flat roofs and chimneys. Free quotes, 24/7 emergency repairs.', kildare_page, ld=faq_ld(),
       kw='roofers Kildare, roof repairs Kildare, roofers Maynooth, roofers Leixlip, roofers Celbridge, roofers Kilcock, roofers Naas, roofers Newbridge, flat roofing Kildare, chimney repairs Kildare')
+    P('roofers-meath/', 'areas', 'Roofers in Meath | Navan, Ashbourne, Ratoath & Dunboyne' + T, 'Roofers covering Navan, Ashbourne, Ratoath, Dunboyne, Dunshaughlin, Trim and all of Meath. Roof repairs, new roofs, flat roofs and chimneys. Free quotes, 24/7 emergency repairs.', meath_page, ld=faq_ld(),
+      kw='roofers Meath, roof repairs Meath, roofers Navan, roofers Ashbourne, roofers Ratoath, roofers Dunboyne, roofers Trim, flat roofing Meath, chimney repairs Meath, new roof Meath')
+    P('roofers-wicklow/', 'areas', 'Roofers in Wicklow | Bray, Greystones, Wicklow Town & Arklow' + T, 'Roofers covering Bray, Greystones, Enniskerry, Wicklow Town, Arklow, Blessington and all of Wicklow. Roof repairs, new roofs, flat roofs and chimneys. Free quotes, 24/7 emergency repairs.', wicklow_page, ld=faq_ld(),
+      kw='roofers Wicklow, roof repairs Wicklow, roofers Bray, roofers Greystones, roofers Wicklow Town, roofers Arklow, roofers Blessington, flat roofing Wicklow, chimney repairs Wicklow, new roof Wicklow')
     P('portfolio/', 'portfolio', 'Roofing Projects Dublin: Before & After' + T, 'Before and after roofing projects and recent jobs by Pro Choice Roofing in Dublin.', portfolio_page)
-    P('about/', 'about', 'About Our Dublin Roofers' + T, 'Pro Choice Roofing: reliable, experienced roofers for homes and businesses across North Dublin, Kildare, Meath and Louth.', about_page)
+    P('about/', 'about', 'About Our Dublin Roofers' + T, 'Pro Choice Roofing: reliable, experienced roofers for homes and businesses across North Dublin, Meath, Kildare, Wicklow and Louth.', about_page)
     P('contact/', 'contact', 'Contact Us: Free Roofing Quote Dublin' + T, 'Contact Pro Choice Roofing for a free roofing quote in Dublin. Call 087 438 5708, WhatsApp or email prochoiceroofers@gmail.com.', contact_page)
     P('cookie-policy/', '', 'Cookie Policy' + T, 'How the Pro Choice Roofing website uses cookies.', cookie_page)
     P('privacy-policy/', '', 'Privacy Policy' + T, 'How Pro Choice Roofing handles your personal information.', privacy_page)
