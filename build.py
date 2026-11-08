@@ -216,13 +216,13 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=12">
+<link rel="stylesheet" href="{p}assets/style.css?v=13">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
-gtag('set','ads_data_redaction',ok!=='granted');gtag('js',new Date());gtag('config','{GA_ID}');</script>
+gtag('set','ads_data_redaction',ok!=='granted');gtag('set','url_passthrough',true);gtag('js',new Date());gtag('config','{GA_ID}');</script>
 <script>(function(){{var d=0;function go(){{if(d)return;d=1;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id={GA_ID}';document.head.appendChild(s)}}
-['scroll','pointerdown','keydown','touchstart'].forEach(function(e){{addEventListener(e,go,{{once:true,passive:true}})}});addEventListener('load',function(){{setTimeout(go,5500)}})}})()</script>
+['scroll','pointerdown','keydown','touchstart'].forEach(function(e){{addEventListener(e,go,{{once:true,passive:true}})}});addEventListener('load',function(){{setTimeout(go,2500)}})}})()</script>
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"RoofingContractor","name":"Pro Choice Roofing","url":"{SITE}/","telephone":"+353874385708","email":"{EMAIL}","image":"{SITE}/img/after-2.jpg","logo":"{SITE}/img/logo.png","address":{{"@type":"PostalAddress","streetAddress":"20 Mount Eustace Crescent","addressLocality":"Dublin 15","postalCode":"D15 RY6R","addressCountry":"IE"}},"openingHours":"Mo-Su 00:00-23:59","priceRange":"€€","geo":{{"@type":"GeoCoordinates","latitude":53.4185,"longitude":-6.3920}},"areaServed":[{AREA_LD}],"knowsAbout":["Roof repairs","New roof installation","Flat roofing","Chimney repairs","Emergency roof repairs","Guttering, fascia and soffits","Roof cleaning"],"aggregateRating":{{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"40","bestRating":"5"}}}}</script>'''
 
 def header(p, active):
@@ -322,7 +322,7 @@ def footer(p):
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=12');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=13');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -347,7 +347,7 @@ def page(path, active, title, desc, body, intro=False, kw='', ld=''):
 {body(p)}
 </main>
 {footer(p)}
-<div class="cc" id="cc" role="dialog" aria-label="Cookie choices" hidden><p><b>Cookies</b>We use cookies to see how people use this site and to measure our ads. You can change your mind any time. <a href="{p}cookie-policy/">Cookie policy</a></p><div class="ccb"><button class="btn btn-line" type="button" data-cc="no">Reject</button><button class="btn btn-blue" type="button" data-cc="yes">Accept</button></div></div>
+<div class="cc" id="cc" role="region" aria-label="Cookie choices" hidden><p>We use cookies for analytics &amp; ads. <a href="{p}cookie-policy/">Cookie policy</a></p><div class="ccb"><button class="ccbtn" type="button" data-cc="no">Reject</button><button class="ccbtn y" type="button" data-cc="yes">Accept</button></div></div>
 {scripts(p)}
 </body>
 </html>

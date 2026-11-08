@@ -108,9 +108,9 @@
       try { localStorage.setItem('pcr_consent', yes ? 'yes' : 'no'); } catch (e) {}
       const v = yes ? 'granted' : 'denied';
       if (typeof gtag === 'function') { gtag('consent', 'update', { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v }); gtag('set', 'ads_data_redaction', !yes); }
-      cc.classList.remove('on'); setTimeout(() => { cc.hidden = true; }, 300);
+      cc.classList.remove('on'); html.classList.remove('cc-on'); setTimeout(() => { cc.hidden = true; }, 350);
     };
-    const show = () => { cc.hidden = false; requestAnimationFrame(() => cc.classList.add('on')); };
+    const show = () => { cc.hidden = false; requestAnimationFrame(() => { cc.classList.add('on'); html.classList.add('cc-on'); }); };
     $$('[data-cc]', cc).forEach(b => b.addEventListener('click', () => choose(b.dataset.cc === 'yes')));
     $$('[data-ccopen]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(); }));
     if (saved !== 'yes' && saved !== 'no') { if (window.__intro_done || !$('#loader')) setTimeout(show, 800); else addEventListener('intro:done', () => setTimeout(show, 800), { once: true }); }
