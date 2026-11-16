@@ -70,6 +70,10 @@
     acc.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
   }));
 
+  /* phones: floating call/WhatsApp buttons wait until the visitor scrolls, so they never cover the first screen's buttons */
+  const fabOn = () => html.classList.toggle('fab-on', scrollY > innerHeight * 0.5);
+  addEventListener('scroll', fabOn, { passive: true }); fabOn();
+
   /* quote panel: drops down from under the header (like vantageroofing.ie) */
   const qd = $('#qdrop');
   const setQ = open => {
@@ -131,8 +135,7 @@
       if (bad) { say('Please fill in the highlighted fields.'); bad.focus(); return; }
       if ($('.hp', form) && $('.hp', form).value) return;
       const data = Object.fromEntries(new FormData(form).entries()); delete data.botcheck;
-      if (data.eircode) data.eircode = data.eircode.toUpperCase();
-      const subject = 'Website enquiry: ' + [data.service || 'Roofing quote', data.eircode, data.name || data.phone].filter(Boolean).join(' – ');
+      const subject = 'Website enquiry: ' + [data.service || 'Roofing quote', data.area, data.name || data.phone].filter(Boolean).join(' – ');
       const body = Object.entries(data).filter(([, v]) => v).map(([k, v]) => k.charAt(0).toUpperCase() + k.slice(1) + ': ' + v).join('\n');
       const btn = $('button[type=submit]', form); const label = btn.innerHTML;
       if (CONFIG.formEndpoint && CONFIG.formKey) {

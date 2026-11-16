@@ -216,7 +216,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=13">
+<link rel="stylesheet" href="{p}assets/style.css?v=14">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
@@ -264,14 +264,14 @@ def select(name='service'):
 def form(p, kind='quote', title='Request a free quote', sub='Free, no-obligation written quotation. We aim to respond to every enquiry within 24 hours.'):
     if kind == 'callback':
         fields = f'''<label class="f"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" required></label>
-<label class="f"><span>Eircode *</span><input name="eircode" autocomplete="postal-code" required maxlength="8" pattern="[A-Za-z][0-9][0-9Ww] ?[0-9A-Za-z]{{4}}" placeholder="e.g. D15 RY6R" style="text-transform:uppercase" title="Your Eircode, e.g. D15 RY6R"></label>
+<label class="f"><span>Eircode or area (optional)</span><input name="area" autocomplete="postal-code" placeholder="e.g. D15 RY6R or Lucan"></label>
 <label class="f full"><span>Name (optional)</span><input name="name" autocomplete="name"></label>'''
         btn = 'Request a callback'
     else:
         email = '<label class="f"><span>Email (optional)</span><input name="email" type="email" autocomplete="email"></label>' if kind == 'full' else ''
         svc_cls = 'f' if kind == 'full' else 'f full'
         fields = f'''<label class="f"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" required></label>
-<label class="f"><span>Eircode *</span><input name="eircode" autocomplete="postal-code" required maxlength="8" pattern="[A-Za-z][0-9][0-9Ww] ?[0-9A-Za-z]{{4}}" placeholder="e.g. D15 RY6R" style="text-transform:uppercase" title="Your Eircode, e.g. D15 RY6R"></label>
+<label class="f"><span>Eircode or area (optional)</span><input name="area" autocomplete="postal-code" placeholder="e.g. D15 RY6R or Lucan"></label>
 <label class="f{'' if kind == 'full' else ' full'}"><span>Name (optional)</span><input name="name" autocomplete="name"></label>
 {email}<label class="f full"><span>Service (optional)</span>{select()}</label>
 <label class="f full"><span>Message (optional)</span><textarea name="message" placeholder="Tell us about the problem or project"></textarea></label>'''
@@ -322,7 +322,7 @@ def footer(p):
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=13');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=14');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -495,6 +495,7 @@ def home(p):
 <a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>4.9</b> from 40 Google reviews</a>
 <span class="eyebrow">Dublin · Meath · Kildare · Wicklow</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
+<a class="waoffer" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span>📸 WhatsApp us a photo of the problem and get a price the same day. No call-out fee.</span></a>
 <p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>
 <div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
 <ul class="trust">{trust}</ul>
