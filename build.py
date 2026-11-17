@@ -217,6 +217,8 @@ def head(p, title, desc, path, kw=''):
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="{p}assets/style.css?v=14">
+<!-- CHEQ / ClickCease click-fraud protection for paid ads -->
+<script async src="https://ob.brilliantchap.com/i/c7f624dbaf6b15fe9604167292cc8590.js" class="ct_clicktrue"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
 var cc=null;try{{cc=localStorage.getItem('pcr_consent')}}catch(e){{}}var ok=cc==='yes'?'granted':'denied';
 gtag('consent','default',{{ad_storage:ok,ad_user_data:ok,ad_personalization:ok,analytics_storage:ok,wait_for_update:500}});
@@ -341,6 +343,7 @@ def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     html = f'''{head_html}
 </head>
 <body>
+<noscript><iframe src="https://ob.brilliantchap.com/ns/c7f624dbaf6b15fe9604167292cc8590.html?ch=" width="0" height="0" style="display:none"></iframe></noscript>
 {loader}{intro_js}
 {header(p, active)}
 <main>
@@ -769,6 +772,8 @@ def cookie_page(p):
 <h2>Statistics &amp; marketing</h2>
 <p>With your consent, we use Google Analytics to understand how visitors use the site, and Google Ads to measure whether our ads lead to enquiries. These cookies are only set after you click <b>Accept</b> on the cookie banner. If you reject them, Google receives only basic, cookieless signals with no identifiers. You can change your choice at any time with the <b>Cookie settings</b> link at the bottom of every page.</p>
 <table><thead><tr><th>Name</th><th>Provider</th><th>Description</th><th>Duration</th></tr></thead><tbody>{srows}</tbody></table>
+<h2>Ad click protection</h2>
+<p>We use a click-fraud protection service (CHEQ / ClickCease) on this website. It checks visits that arrive from our paid ads to detect bots and fake clicks, so we are not charged for them. It may read technical information about your device and visit, such as IP address and browser details, for that purpose only.</p>
 <h2>Third-party content</h2>
 <p>Our contact page shows an embedded Google Map. Google may set its own cookies when the map loads. See <a class="blue" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s privacy policy</a> for details. Fonts are served by Google Fonts.</p>
 <h2>Managing cookies</h2>
