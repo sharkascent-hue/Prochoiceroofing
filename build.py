@@ -316,7 +316,7 @@ def footer(p):
 <li>{I['mail']}<a href="mailto:{EMAIL}" data-cfg="email">{EMAIL}</a></li>
 <li>{I['clock']}<span>Open 24/7 for emergencies</span></li></ul></div>
 </div>
-<div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved.</span>
+<div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved. · <a href="https://almlabmarketing.com" target="_blank" rel="noopener">Website by AlmLab</a></span>
 <nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="#" data-ccopen>Cookie settings</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
 </div></footer>
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
