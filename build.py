@@ -316,9 +316,10 @@ def footer(p):
 <li>{I['mail']}<a href="mailto:{EMAIL}" data-cfg="email">{EMAIL}</a></li>
 <li>{I['clock']}<span>Open 24/7 for emergencies</span></li></ul></div>
 </div>
-<div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved. · <a href="https://almlabmarketing.com" target="_blank" rel="noopener">Website by AlmLab</a></span>
+<div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved.</span>
 <nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="#" data-ccopen>Cookie settings</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
-</div></footer>
+</div><div class="almlab-credit-row" style="display:flex;justify-content:flex-end;padding:16px 24px 156px"><a class="almlab-credit" href="https://almlabmarketing.com" target="_blank" rel="noopener" style="color:#5dff7f;font-weight:600;font-size:13px;letter-spacing:.03em;text-decoration:none;white-space:nowrap;text-shadow:0 0 4px rgba(93,255,127,.95),0 0 10px rgba(57,255,106,.6),0 0 22px rgba(57,255,106,.35)">Website by AlmLab</a></div>
+</footer>
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
 
 def scripts(p):
