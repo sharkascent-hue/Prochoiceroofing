@@ -216,7 +216,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=14">
+<link rel="stylesheet" href="{p}assets/style.css?v=15">
 <!-- CHEQ / ClickCease click-fraud protection for paid ads -->
 <script async src="https://ob.brilliantchap.com/i/c7f624dbaf6b15fe9604167292cc8590.js" class="ct_clicktrue"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
@@ -318,14 +318,14 @@ def footer(p):
 </div>
 <div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved.</span>
 <nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="#" data-ccopen>Cookie settings</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
-</div><div class="almlab-credit-row" style="display:flex;justify-content:center;padding:12px 16px 4px"><a class="almlab-credit" href="https://almlabmarketing.com" target="_blank" rel="noopener" aria-label="Website by AlmLab" style="display:inline-flex;align-items:center;gap:3px;color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.06em;line-height:1;text-decoration:none;white-space:nowrap"><span>Website by</span><img src="https://almlabmarketing.com/almlab-credit.png" alt="AlmLab" width="74" height="28" loading="lazy" style="height:28px;width:auto;display:block"></a></div>
-</footer>
+</div></footer>
+<nav class="mbar" aria-label="Quick contact"><a href="{TEL}">{I['phone']}<span>Call now</span></a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span>WhatsApp</span></a><a class="q" href="#quote" data-quote-hero>{I['quote']}<span>Get a quote</span></a></nav>
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
 
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=14');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=15');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -392,15 +392,36 @@ def responsive(html):
     return re.sub(r'<img[^>]*?src="((?:\.\./)*)img/([\w-]+\.(?:jpg|png))"[^>]*>', fix, html)
 
 # ---------- sections ----------
-def phero(p, crumb, h1, lead, img, extra=''):
+WAURL = 'https://wa.me/353874385708'
+def hero_form(p, src, svc=''):
+    """Open quote form right under the headline: phone required, name and area optional."""
+    hidden = f'<input type="hidden" name="service" value="{svc}">' if svc else ''
+    return f"""<form class="hform" data-form data-name="Hero form: {src}" novalidate>
+<div class="fmsg" role="status"></div>
+<div class="hf-grid">
+<label class="f hf-ph"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="08x xxx xxxx"></label>
+<label class="f"><span>Name</span><input name="name" autocomplete="name"></label>
+<label class="f"><span>Area</span><input name="area" placeholder="e.g. Lucan"></label>
+<button class="btn btn-blue" type="submit">Get my free quote {I['arrow']}</button>
+</div>
+<input type="hidden" name="page" value="{src}">{hidden}
+<input class="hp" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+<p class="hf-note">{I['check']} Free quote · No call-out fee · We call you back today</p>
+</form>"""
+
+def waline(p):
+    return f'<a class="waoffer" href="{WAURL}" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span>📸 WhatsApp a photo, get a price the same day. No call-out fee.</span></a>'
+
+def phero(p, crumb, h1, lead, img, extra='', form=None, svc=''):
     trail = ''.join(f'<span>/</span><a href="{p}{u}">{t}</a>' for t, u in crumb[:-1])
     return f'''<section class="phero" data-rain>
 <img class="bg" src="{p}img/{img}" alt="" fetchpriority="high">
 <div class="wrap">
 <div class="crumb"><a href="{p}">Home</a>{trail}<span>/</span><b>{crumb[-1][0]}</b></div>
 <h1>{h1}</h1>
+{hero_form(p, form, svc) + waline(p) if form else ''}
 <p class="lead">{lead}</p>
-{extra}
+{'' if form else extra}
 </div></section>'''
 
 def marquee():
@@ -499,9 +520,9 @@ def home(p):
 <a class="gbadge" href="{GREVIEWS}" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b>4.9</b> from 40 Google reviews</a>
 <span class="eyebrow">Dublin · Meath · Kildare · Wicklow</span>
 <h1>Reliable roofing &amp; roof repair contractors in <span class="blue">Dublin.</span></h1>
-<a class="waoffer" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span>📸 WhatsApp us a photo of the problem and get a price the same day. No call-out fee.</span></a>
-<p class="lead">New roofs, roof repairs, flat roofing, chimneys, guttering and 24/7 emergency call-outs. Quality materials, installed properly the first time, with a clear written quote before any work starts.</p>
-<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['arrow']}</a><a class="btn btn-ghost" href="{TEL}">{I['phone']} Call {PHONE}</a></div>
+{hero_form(p, 'Home')}
+{waline(p)}
+<p class="lead">Roof repairs, new roofs and 24/7 emergency call-outs, with a written quote first.</p>
 <ul class="trust">{trust}</ul>
 </div>
 <div class="hcard">
@@ -607,7 +628,7 @@ def service_page(s):
         others = [o for o in SERVICES if o is not s]
         other_cards = ''.join(f'''<a class="scard" href="{p}{o['slug']}/" style="min-height:300px"><img src="{p}img/{o['card']}" alt="" loading="lazy"><span class="go">{I['arrow']}</span><h3>{o['name']}</h3><span class="tlink">View service {I['arrow']}</span></a>''' for o in others[:3])
         ce, ch, ct = s['close']
-        return f'''{phero(p, [('Services', 'services/'), (s['name'], s['slug'] + '/')], s['h1'], s['lead'], s['card'], f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote data-svc="{SVC_OPT[s['slug']]}">Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} Call {PHONE}</a></div>')}
+        return f'''{phero(p, [('Services', 'services/'), (s['name'], s['slug'] + '/')], s['h1'], s['lead'], s['card'], f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote data-svc="{SVC_OPT[s['slug']]}">Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} Call {PHONE}</a></div>', form=s['name'] if s['slug'] == 'emergency-roof-repairs' else None, svc=SVC_OPT[s['slug']])}
 {marquee()}
 <section class="sec"><div class="wrap split">
 <div><span class="eyebrow">{s['eyebrow']}</span><h2 data-split>{s['h2']}</h2>{paras}
@@ -686,7 +707,7 @@ def contact_page(p):
 
 def dublin_page(p):
     towns = ''.join(f'<span>{t}</span>' for t in sorted(set(AREA_TOWNS)))
-    return f'''{phero(p, [('Roofers in Dublin', 'roofers-dublin/')], 'Roofers in Dublin you can rely on.', 'Pro Choice Roofing is a Dublin 15 roofing company covering every part of Dublin, plus Meath, Kildare, Wicklow and Louth. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.', 'roof-6.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+    return f'''{phero(p, [('Roofers in Dublin', 'roofers-dublin/')], 'Roofers in Dublin you can rely on.', 'Local Dublin 15 roofers covering all of Dublin. Written quote first, 24/7 call-outs.', 'roof-6.jpg', form='Roofers in Dublin')}
 {marquee()}
 <section class="sec"><div class="wrap split">
 <div><span class="eyebrow">Local Dublin roofers</span><h2 data-split>A roofing company based in Dublin 15.</h2>
@@ -705,7 +726,7 @@ def dublin_page(p):
 
 def kildare_page(p):
     towns = ''.join(f'<span>{t}</span>' for t in KILDARE)
-    return f"""{phero(p, [('Roofers in Kildare', 'roofers-kildare/')], 'Roofers in Kildare you can rely on.', 'Pro Choice Roofing covers all of north and mid Kildare from our base in Dublin 15, minutes from Leixlip and Maynooth. Roof repairs, new roofs, flat roofs, chimneys, guttering and 24/7 emergency call-outs.', 'roof-5.jpg', f'<div class="btn-row"><a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I["arrow"]}</a><a class="btn btn-ghost" href="{TEL}">{I["phone"]} {PHONE}</a></div>')}
+    return f"""{phero(p, [('Roofers in Kildare', 'roofers-kildare/')], 'Roofers in Kildare you can rely on.', 'Minutes from Leixlip and Maynooth. Written quote first, 24/7 call-outs.', 'roof-5.jpg', form='Roofers in Kildare')}
 {marquee()}
 <section class="sec"><div class="wrap split">
 <div><span class="eyebrow">Local Kildare roofers</span><h2 data-split>Minutes from Maynooth, Leixlip and Celbridge.</h2>

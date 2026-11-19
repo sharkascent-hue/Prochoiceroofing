@@ -617,19 +617,16 @@ html.qdrop-open .qdrop{transform:none;transition:opacity .3s ease,transform .45s
 }
 .marquee .track{will-change:transform}
 
-/* cookie choice: a thin bar across the very top; the header moves down under it */
-:root{--cch:52px}
-.cc{position:fixed;top:0;left:0;right:0;z-index:1001;height:var(--cch);padding:0 10px 0 16px;background:#061630;border-bottom:1px solid rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;gap:12px;transform:translateY(-100%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+/* cookie choice: a thin strip along the bottom; on phones it sits just above the quick-contact bar */
+.cc{position:fixed;left:0;right:0;bottom:0;z-index:1001;padding:8px 10px 8px 16px;background:rgba(6,22,48,.97);border-top:1px solid rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .cc.on{transform:none}
 .cc[hidden]{display:none}
-.cc p{flex:1;min-width:0;margin:0;font-size:.82rem;line-height:1.3;color:rgba(255,255,255,.85)}
+.cc p{flex:1;min-width:0;margin:0;font-size:.8rem;line-height:1.3;color:rgba(255,255,255,.85)}
 .cc p a{color:var(--blue-light);text-decoration:underline;white-space:nowrap}
 .ccb{display:flex;gap:6px;flex:none}
-.ccbtn{min-height:38px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+.ccbtn{min-height:34px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;font:inherit;font-weight:700;font-size:.8rem;cursor:pointer}
 .ccbtn.y{background:var(--blue);border-color:var(--blue)}
-html.cc-on .hdr{top:var(--cch)}
-html.cc-on .mnav{padding-top:calc(110px + var(--cch))}
-@media (max-width:600px){.cc{padding:0 8px 0 12px;gap:8px}.cc p{font-size:.74rem}.ccbtn{padding:0 12px;font-size:.78rem}}
+@media (max-width:760px){.cc{bottom:calc(62px + env(safe-area-inset-bottom));padding:6px 8px 6px 12px;gap:8px}.cc p{font-size:.72rem}.ccbtn{min-height:32px;padding:0 11px;font-size:.74rem}}
 
 a.rhead,a.gbadge{transition:background .25s,border-color .25s}a.rhead:hover,a.gbadge:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
 
@@ -652,3 +649,32 @@ a.rhead,a.gbadge{transition:background .25s,border-color .25s}a.rhead:hover,a.gb
   .fab{opacity:0;transform:translateY(24px);pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1)}
   html.fab-on .fab{opacity:1;transform:none;pointer-events:auto}
 }
+
+/* open quote form under the headline */
+.hform{max-width:600px;margin:4px 0 16px;padding:16px;border-radius:20px;background:rgba(255,255,255,.97);color:var(--ink);box-shadow:0 24px 50px -24px rgba(0,0,0,.6)}
+.hf-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;align-items:end}
+.hform label.f span{font-size:.72rem;margin-bottom:4px}
+.hform label.f input{padding:12px 13px;font-size:1rem}
+.hform .btn{grid-column:1/-1;width:100%;margin:2px 0 0;padding:15px 20px;font-size:1rem}
+.hf-note{display:flex;align-items:center;gap:6px;margin:10px 0 0;font-size:.78rem;color:var(--muted);max-width:none}
+.hf-note svg{width:14px;height:14px;color:var(--blue);flex:none}
+.hform .fmsg{margin-bottom:10px}
+.hero .waoffer,.phero .waoffer{margin:0 0 16px}
+.phero .hform{margin-top:6px}
+/* quick-contact bar fixed to the bottom of phones */
+.mbar{display:none}
+@media (max-width:760px){
+  .mbar{display:grid;grid-template-columns:1fr 1fr 1.25fr;position:fixed;left:0;right:0;bottom:0;z-index:850;gap:8px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(6,22,48,.97);border-top:1px solid rgba(255,255,255,.1)}
+  .mbar a{display:flex;align-items:center;justify-content:center;gap:7px;min-height:46px;border-radius:12px;color:#fff;font-weight:800;font-size:.84rem;background:rgba(255,255,255,.08)}
+  .mbar a svg{width:20px;height:20px;flex:none}
+  .mbar a.wa svg{color:#25d366}
+  .mbar a.q{background:var(--blue)}
+  body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
+  .fab{display:none!important}
+  .hf-grid{grid-template-columns:1fr 1fr}
+  .hf-ph{grid-column:1/-1}
+}
+
+/* desktop: lift the floating buttons clear of the cookie strip while it shows */
+.fab{transition:bottom .3s}
+html.cc-on .fab{bottom:70px}

@@ -74,6 +74,16 @@
   const fabOn = () => html.classList.toggle('fab-on', scrollY > innerHeight * 0.5);
   addEventListener('scroll', fabOn, { passive: true }); fabOn();
 
+  /* bottom bar "Get a quote": jump to the open form under the headline, or open the drop-down where a page has none */
+  $$('[data-quote-hero]').forEach(b => b.addEventListener('click', e => {
+    const f = $('.hform');
+    if (!f) return;            // the drop-down handler below takes it
+    e.preventDefault(); e.stopImmediatePropagation();
+    f.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => { const i = $('input[name=phone]', f); if (i) i.focus({ preventScroll: true }); }, 450);
+  }));
+  $$('[data-quote-hero]').forEach(b => { if (!$('.hform')) b.setAttribute('data-quote', ''); });
+
   /* quote panel: drops down from under the header (like vantageroofing.ie) */
   const qd = $('#qdrop');
   const setQ = open => {
@@ -144,7 +154,7 @@
           const r = await fetch(CONFIG.formEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: CONFIG.formKey, subject, from_name: 'Pro Choice Roofing website', ...data }) });
           const j = await r.json().catch(() => ({}));
           if (!r.ok || j.success === false) throw new Error();
-          track('generate_lead', { form: form.closest('#qdrop') ? 'quote drop-down' : (form.querySelector('h3') || {}).textContent || 'form', service: data.service || '' });
+          track('generate_lead', { form: form.dataset.name || (form.closest('#qdrop') ? 'quote drop-down' : (form.querySelector('h3') || {}).textContent || 'form'), service: data.service || '' });
           form.reset(); say('Thanks, we have your request. We aim to respond within 24 hours. If it’s urgent, call ' + CONFIG.phone + '.', true);
         } catch (err) { say('Sorry, that didn’t send. Please call ' + CONFIG.phone + ' or email ' + CONFIG.email + '.'); }
         btn.disabled = false; btn.innerHTML = label;
