@@ -216,7 +216,7 @@ def head(p, title, desc, path, kw=''):
 <link rel="icon" href="{p}img/icon-192.png"><link rel="apple-touch-icon" href="{p}img/icon-192.png">
 <link rel="preload" href="{p}assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{p}assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}assets/style.css?v=15">
+<link rel="stylesheet" href="{p}assets/style.css?v=16">
 <!-- CHEQ / ClickCease click-fraud protection for paid ads -->
 <script async src="https://ob.brilliantchap.com/i/c7f624dbaf6b15fe9604167292cc8590.js" class="ct_clicktrue"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}
@@ -318,14 +318,16 @@ def footer(p):
 </div>
 <div class="base"><span>Copyright © <span data-cfg="year">2026</span> Pro Choice Roofing, All rights reserved.</span>
 <nav><a href="{p}cookie-policy/">Cookie Policy</a><a href="#" data-ccopen>Cookie settings</a><a href="{p}privacy-policy/">Privacy Policy</a></nav></div>
-</div></footer>
+</div>
+<div class="almlab-credit-row" style="display:flex;justify-content:center;padding:12px 16px 4px"><a class="almlab-credit" href="https://almlabmarketing.com" target="_blank" rel="noopener" aria-label="Website by AlmLab" style="display:inline-flex;align-items:center;gap:3px;color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.06em;line-height:1;text-decoration:none;white-space:nowrap"><span>Website by</span><img src="https://almlabmarketing.com/almlab-credit.png" alt="AlmLab" width="74" height="28" loading="lazy" style="height:28px;width:auto;display:block"></a></div>
+</footer>
 <nav class="mbar" aria-label="Quick contact"><a href="{TEL}">{I['phone']}<span>Call now</span></a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener">{WA}<span>WhatsApp</span></a><a class="q" href="#quote" data-quote-hero>{I['quote']}<span>Get a quote</span></a></nav>
 <div class="fab"><a class="ph" href="{TEL}" aria-label="Call {PHONE}">{I['phone']}</a><a class="wa" href="https://wa.me/353874385708" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA}</a></div>'''
 
 def scripts(p):
     # GSAP, ScrollTrigger and Lenis only drive desktop effects, so phones never download them
     return f'''<script>(function(){{var L=[];if(matchMedia('(pointer:fine) and (min-width:1021px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)L=['https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js','https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js'];
-L.push('{p}assets/site.js?v=15');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
+L.push('{p}assets/site.js?v=16');L.forEach(function(u){{var s=document.createElement('script');s.src=u;s.async=false;document.body.appendChild(s)}})}})()</script>'''
 
 def page(path, active, title, desc, body, intro=False, kw='', ld=''):
     p = '../' * path.count('/')
@@ -394,19 +396,20 @@ def responsive(html):
 # ---------- sections ----------
 WAURL = 'https://wa.me/353874385708'
 def hero_form(p, src, svc=''):
-    """Open quote form right under the headline: phone required, name and area optional."""
-    hidden = f'<input type="hidden" name="service" value="{svc}">' if svc else ''
+    """Open quote form right under the headline (white card, like vantageroofing.ie): only the phone is required."""
+    opts = ''.join(f'<option{" selected" if o == svc else ""}>{o}</option>' for o in SERVICE_OPTS)
     return f"""<form class="hform" data-form data-name="Hero form: {src}" novalidate>
 <div class="fmsg" role="status"></div>
 <div class="hf-grid">
-<label class="f hf-ph"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="08x xxx xxxx"></label>
-<label class="f"><span>Name</span><input name="name" autocomplete="name"></label>
-<label class="f"><span>Area</span><input name="area" placeholder="e.g. Lucan"></label>
+<label class="f"><span class="sr">Your name</span><input name="name" autocomplete="name" placeholder="Your name"></label>
+<label class="f"><span class="sr">Phone number (required)</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="Phone number"></label>
+<label class="f"><span class="sr">Your area</span><input name="area" placeholder="Your area"></label>
+<label class="f"><span class="sr">Service (optional)</span><select name="service"><option value="">Service (optional)</option>{opts}</select></label>
 <button class="btn btn-blue" type="submit">Get my free quote {I['arrow']}</button>
 </div>
-<input type="hidden" name="page" value="{src}">{hidden}
+<input type="hidden" name="page" value="{src}">
 <input class="hp" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-<p class="hf-note">{I['check']} Free quote · No call-out fee · We call you back today</p>
+<p class="hf-note">Free, no obligation. <a href="{p}privacy-policy/">Privacy policy</a></p>
 </form>"""
 
 def waline(p):
@@ -525,14 +528,9 @@ def home(p):
 <p class="lead">Roof repairs, new roofs and 24/7 emergency call-outs, with a written quote first.</p>
 <ul class="trust">{trust}</ul>
 </div>
-<div class="hcard">
-<span class="live"><i></i>Available 24/7</span>
-<h2>Free roof inspection &amp; quote</h2>
-<ul class="ticks">{''.join(f"<li>{I['check']}{t}</li>" for t in ['No call-out fee', 'Clear written quote before work starts', 'Fully insured, work guaranteed', 'Emergency repairs, day or night'])}</ul>
-<a class="btn btn-blue" href="#quote" data-quote>Get a free quote {I['chev']}</a>
-<a class="btn btn-ghost" href="{TEL}">{I['phone']} {PHONE}</a>
-<div class="hrev"><span class="stars">★★★★★</span><q>The rain has been torrential and the roof has stood the test. Great work. Great company.</q><span>Nathan Power · Google review</span></div>
-</div>
+<div class="hphoto"><img src="{p}img/roofer-dublin.jpg" alt="Recent roof by Pro Choice Roofing in Dublin" width="1280" height="1454" loading="lazy">
+<span class="tag"><i></i>Recent work</span>
+<div class="pill"><i>{I['bolt']}</i><div><b>24/7 call-outs</b><span>Emergency roof repairs</span></div></div></div>
 </div>
 <div class="scroll">Scroll</div>
 </section>

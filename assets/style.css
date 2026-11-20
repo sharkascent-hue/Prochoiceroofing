@@ -650,17 +650,31 @@ a.rhead,a.gbadge{transition:background .25s,border-color .25s}a.rhead:hover,a.gb
   html.fab-on .fab{opacity:1;transform:none;pointer-events:auto}
 }
 
-/* open quote form under the headline */
-.hform{max-width:600px;margin:4px 0 16px;padding:16px;border-radius:20px;background:rgba(255,255,255,.97);color:var(--ink);box-shadow:0 24px 50px -24px rgba(0,0,0,.6)}
-.hf-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;align-items:end}
-.hform label.f span{font-size:.72rem;margin-bottom:4px}
-.hform label.f input{padding:12px 13px;font-size:1rem}
-.hform .btn{grid-column:1/-1;width:100%;margin:2px 0 0;padding:15px 20px;font-size:1rem}
-.hf-note{display:flex;align-items:center;gap:6px;margin:10px 0 0;font-size:.78rem;color:var(--muted);max-width:none}
-.hf-note svg{width:14px;height:14px;color:var(--blue);flex:none}
-.hform .fmsg{margin-bottom:10px}
+/* open quote form under the headline: compact white card, like vantageroofing.ie */
+.hform{max-width:560px;margin:6px 0 18px;padding:12px;border-radius:18px;background:#fff;color:var(--ink);box-shadow:0 30px 60px -28px rgba(0,0,0,.7)}
+.hf-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hform label.f{display:block}
+.hform .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hform label.f input,.hform label.f select{padding:12px 13px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:.95rem}
+.hform label.f select{color:var(--muted)}
+.hform label.f.bad input{border-color:#e0464e;background:#fff5f5}
+.hform .btn{grid-column:1/-1;width:100%;margin:2px 0 0;padding:15px 20px;font-size:1rem;background:linear-gradient(90deg,#1fa3ea,#1477c4);border-radius:999px}
+.hf-note{margin:9px 0 2px;text-align:center;font-size:.76rem;color:var(--muted);max-width:none}
+.hf-note a{color:var(--blue-dark);text-decoration:underline}
+.hform .fmsg{margin-bottom:9px}
 .hero .waoffer,.phero .waoffer{margin:0 0 16px}
 .phero .hform{margin-top:6px}
+/* desktop: a "Recent work" photo of their own job beside the hero */
+.hphoto{position:relative;justify-self:end;width:100%;max-width:440px;aspect-ratio:1280/1454;border-radius:28px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);outline:1.5px solid rgba(99,192,242,.35);outline-offset:10px}
+.hphoto img{width:100%;height:100%;object-fit:cover}
+.hphoto .tag{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(6,22,48,.75);color:#fff;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+.hphoto .tag i{width:8px;height:8px;border-radius:50%;background:#35d07f}
+.hphoto .pill{position:absolute;left:16px;bottom:16px;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.hphoto .pill i{width:40px;height:40px;border-radius:11px;background:var(--blue);color:#fff;display:grid;place-items:center}
+.hphoto .pill i svg{width:20px;height:20px}
+.hphoto .pill b{display:block;font-family:var(--head);font-size:.98rem}
+.hphoto .pill span{font-size:.78rem;color:var(--muted)}
+@media (max-width:1020px){.hphoto{display:none}}
 /* quick-contact bar fixed to the bottom of phones */
 .mbar{display:none}
 @media (max-width:760px){
@@ -671,8 +685,6 @@ a.rhead,a.gbadge{transition:background .25s,border-color .25s}a.rhead:hover,a.gb
   .mbar a.q{background:var(--blue)}
   body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
   .fab{display:none!important}
-  .hf-grid{grid-template-columns:1fr 1fr}
-  .hf-ph{grid-column:1/-1}
 }
 
 /* desktop: lift the floating buttons clear of the cookie strip while it shows */
